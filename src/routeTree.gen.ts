@@ -10,33 +10,78 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MaladiesRouteImport } from './routes/maladies'
+import { Route as RegimesRouteImport } from './routes/regimes'
+import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
+import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaladiesRoute = MaladiesRouteImport.update({
+  id: '/maladies',
+  path: '/maladies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegimesRoute = RegimesRouteImport.update({
+  id: '/regimes',
+  path: '/regimes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaladiesSlugRoute = MaladiesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => MaladiesRoute,
+} as any)
+const RegimesSlugRoute = RegimesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => RegimesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/maladies': typeof MaladiesRouteWithChildren
+  '/regimes': typeof RegimesRouteWithChildren
+  '/maladies/$slug': typeof MaladiesSlugRoute
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/maladies': typeof MaladiesRouteWithChildren
+  '/regimes': typeof RegimesRouteWithChildren
+  '/maladies/$slug': typeof MaladiesSlugRoute
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/maladies': typeof MaladiesRouteWithChildren
+  '/regimes': typeof RegimesRouteWithChildren
+  '/maladies/$slug': typeof MaladiesSlugRoute
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/maladies' | '/regimes' | '/maladies/$slug' | '/regimes/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/maladies' | '/regimes' | '/maladies/$slug' | '/regimes/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/maladies'
+    | '/regimes'
+    | '/maladies/$slug'
+    | '/regimes/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MaladiesRoute: typeof MaladiesRouteWithChildren
+  RegimesRoute: typeof RegimesRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +93,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maladies': {
+      id: '/maladies'
+      path: '/maladies'
+      fullPath: '/maladies'
+      preLoaderRoute: typeof MaladiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/regimes': {
+      id: '/regimes'
+      path: '/regimes'
+      fullPath: '/regimes'
+      preLoaderRoute: typeof RegimesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maladies/$slug': {
+      id: '/maladies/$slug'
+      path: '/$slug'
+      fullPath: '/maladies/$slug'
+      preLoaderRoute: typeof MaladiesSlugRouteImport
+      parentRoute: typeof MaladiesRoute
+    }
+    '/regimes/$slug': {
+      id: '/regimes/$slug'
+      path: '/$slug'
+      fullPath: '/regimes/$slug'
+      preLoaderRoute: typeof RegimesSlugRouteImport
+      parentRoute: typeof RegimesRoute
+    }
   }
 }
 
+interface MaladiesRouteChildren {
+  MaladiesSlugRoute: typeof MaladiesSlugRoute
+}
+
+const MaladiesRouteChildren: MaladiesRouteChildren = {
+  MaladiesSlugRoute: MaladiesSlugRoute,
+}
+
+const MaladiesRouteWithChildren = MaladiesRoute._addFileChildren(
+  MaladiesRouteChildren,
+)
+
+interface RegimesRouteChildren {
+  RegimesSlugRoute: typeof RegimesSlugRoute
+}
+
+const RegimesRouteChildren: RegimesRouteChildren = {
+  RegimesSlugRoute: RegimesSlugRoute,
+}
+
+const RegimesRouteWithChildren =
+  RegimesRoute._addFileChildren(RegimesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MaladiesRoute: MaladiesRouteWithChildren,
+  RegimesRoute: RegimesRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
