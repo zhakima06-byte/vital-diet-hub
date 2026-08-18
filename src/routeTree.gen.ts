@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RegimesRouteImport } from './routes/regimes'
+import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,39 @@ const RegimesRoute = RegimesRouteImport.update({
   path: '/regimes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegimesSlugRoute = RegimesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => RegimesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/regimes': typeof RegimesRoute
+  '/regimes': typeof RegimesRouteWithChildren
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/regimes': typeof RegimesRoute
+  '/regimes': typeof RegimesRouteWithChildren
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/regimes': typeof RegimesRoute
+  '/regimes': typeof RegimesRouteWithChildren
+  '/regimes/$slug': typeof RegimesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/regimes'
+  fullPaths: '/' | '/regimes' | '/regimes/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/regimes'
-  id: '__root__' | '/' | '/regimes'
+  to: '/' | '/regimes' | '/regimes/$slug'
+  id: '__root__' | '/' | '/regimes' | '/regimes/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  RegimesRoute: typeof RegimesRoute
+  RegimesRoute: typeof RegimesRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +74,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegimesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regimes/$slug': {
+      id: '/regimes/$slug'
+      path: '/$slug'
+      fullPath: '/regimes/$slug'
+      preLoaderRoute: typeof RegimesSlugRouteImport
+      parentRoute: typeof RegimesRoute
+    }
   }
 }
 
+interface RegimesRouteChildren {
+  RegimesSlugRoute: typeof RegimesSlugRoute
+}
+
+const RegimesRouteChildren: RegimesRouteChildren = {
+  RegimesSlugRoute: RegimesSlugRoute,
+}
+
+const RegimesRouteWithChildren =
+  RegimesRoute._addFileChildren(RegimesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  RegimesRoute: RegimesRoute,
+  RegimesRoute: RegimesRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
