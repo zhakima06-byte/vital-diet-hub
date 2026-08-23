@@ -11,9 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlimentsRouteImport } from './routes/aliments'
+import { Route as CalculateursRouteImport } from './routes/calculateurs'
 import { Route as MaladiesRouteImport } from './routes/maladies'
 import { Route as RegimesRouteImport } from './routes/regimes'
 import { Route as AlimentsIdRouteImport } from './routes/aliments.$id'
+import { Route as CalculateursIndexRouteImport } from './routes/calculateurs.index'
+import { Route as CalculateursCaloriesRouteImport } from './routes/calculateurs.calories'
+import { Route as CalculateursDfgRouteImport } from './routes/calculateurs.dfg'
+import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 
@@ -25,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AlimentsRoute = AlimentsRouteImport.update({
   id: '/aliments',
   path: '/aliments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculateursRoute = CalculateursRouteImport.update({
+  id: '/calculateurs',
+  path: '/calculateurs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaladiesRoute = MaladiesRouteImport.update({
@@ -42,6 +52,26 @@ const AlimentsIdRoute = AlimentsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AlimentsRoute,
 } as any)
+const CalculateursIndexRoute = CalculateursIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CalculateursRoute,
+} as any)
+const CalculateursCaloriesRoute = CalculateursCaloriesRouteImport.update({
+  id: '/calories',
+  path: '/calories',
+  getParentRoute: () => CalculateursRoute,
+} as any)
+const CalculateursDfgRoute = CalculateursDfgRouteImport.update({
+  id: '/dfg',
+  path: '/dfg',
+  getParentRoute: () => CalculateursRoute,
+} as any)
+const MaladiesIndexRoute = MaladiesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MaladiesRoute,
+} as any)
 const MaladiesSlugRoute = MaladiesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -56,64 +86,91 @@ const RegimesSlugRoute = RegimesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
+  '/calculateurs': typeof CalculateursRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
+  '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/calculateurs/': typeof CalculateursIndexRoute
+  '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
-  '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
+  '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/calculateurs': typeof CalculateursIndexRoute
+  '/maladies': typeof MaladiesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
+  '/calculateurs': typeof CalculateursRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
+  '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/calculateurs/': typeof CalculateursIndexRoute
+  '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/aliments'
+    | '/calculateurs'
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
+    | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/calculateurs/'
+    | '/maladies/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/aliments'
-    | '/maladies'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
+    | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/calculateurs'
+    | '/maladies'
   id:
     | '__root__'
     | '/'
     | '/aliments'
+    | '/calculateurs'
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
+    | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/calculateurs/'
+    | '/maladies/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlimentsRoute: typeof AlimentsRouteWithChildren
+  CalculateursRoute: typeof CalculateursRouteWithChildren
   MaladiesRoute: typeof MaladiesRouteWithChildren
   RegimesRoute: typeof RegimesRouteWithChildren
 }
@@ -132,6 +189,13 @@ declare module '@tanstack/react-router' {
       path: '/aliments'
       fullPath: '/aliments'
       preLoaderRoute: typeof AlimentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculateurs': {
+      id: '/calculateurs'
+      path: '/calculateurs'
+      fullPath: '/calculateurs'
+      preLoaderRoute: typeof CalculateursRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/maladies': {
@@ -154,6 +218,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/aliments/$id'
       preLoaderRoute: typeof AlimentsIdRouteImport
       parentRoute: typeof AlimentsRoute
+    }
+    '/calculateurs/': {
+      id: '/calculateurs/'
+      path: '/'
+      fullPath: '/calculateurs/'
+      preLoaderRoute: typeof CalculateursIndexRouteImport
+      parentRoute: typeof CalculateursRoute
+    }
+    '/calculateurs/calories': {
+      id: '/calculateurs/calories'
+      path: '/calories'
+      fullPath: '/calculateurs/calories'
+      preLoaderRoute: typeof CalculateursCaloriesRouteImport
+      parentRoute: typeof CalculateursRoute
+    }
+    '/calculateurs/dfg': {
+      id: '/calculateurs/dfg'
+      path: '/dfg'
+      fullPath: '/calculateurs/dfg'
+      preLoaderRoute: typeof CalculateursDfgRouteImport
+      parentRoute: typeof CalculateursRoute
+    }
+    '/maladies/': {
+      id: '/maladies/'
+      path: '/'
+      fullPath: '/maladies/'
+      preLoaderRoute: typeof MaladiesIndexRouteImport
+      parentRoute: typeof MaladiesRoute
     }
     '/maladies/$slug': {
       id: '/maladies/$slug'
@@ -184,12 +276,30 @@ const AlimentsRouteWithChildren = AlimentsRoute._addFileChildren(
   AlimentsRouteChildren,
 )
 
+interface CalculateursRouteChildren {
+  CalculateursCaloriesRoute: typeof CalculateursCaloriesRoute
+  CalculateursDfgRoute: typeof CalculateursDfgRoute
+  CalculateursIndexRoute: typeof CalculateursIndexRoute
+}
+
+const CalculateursRouteChildren: CalculateursRouteChildren = {
+  CalculateursCaloriesRoute: CalculateursCaloriesRoute,
+  CalculateursDfgRoute: CalculateursDfgRoute,
+  CalculateursIndexRoute: CalculateursIndexRoute,
+}
+
+const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
+  CalculateursRouteChildren,
+)
+
 interface MaladiesRouteChildren {
   MaladiesSlugRoute: typeof MaladiesSlugRoute
+  MaladiesIndexRoute: typeof MaladiesIndexRoute
 }
 
 const MaladiesRouteChildren: MaladiesRouteChildren = {
   MaladiesSlugRoute: MaladiesSlugRoute,
+  MaladiesIndexRoute: MaladiesIndexRoute,
 }
 
 const MaladiesRouteWithChildren = MaladiesRoute._addFileChildren(
@@ -210,6 +320,7 @@ const RegimesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlimentsRoute: AlimentsRouteWithChildren,
+  CalculateursRoute: CalculateursRouteWithChildren,
   MaladiesRoute: MaladiesRouteWithChildren,
   RegimesRoute: RegimesRouteWithChildren,
 }
