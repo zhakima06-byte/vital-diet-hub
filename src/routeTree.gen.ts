@@ -16,6 +16,7 @@ import { Route as MaladiesRouteImport } from './routes/maladies'
 import { Route as RegimesRouteImport } from './routes/regimes'
 import { Route as AlimentsIdRouteImport } from './routes/aliments.$id'
 import { Route as CalculateursIndexRouteImport } from './routes/calculateurs.index'
+import { Route as CalculateursCaloriesRouteImport } from './routes/calculateurs.calories'
 import { Route as CalculateursDfgRouteImport } from './routes/calculateurs.dfg'
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
@@ -56,6 +57,11 @@ const CalculateursIndexRoute = CalculateursIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CalculateursRoute,
 } as any)
+const CalculateursCaloriesRoute = CalculateursCaloriesRouteImport.update({
+  id: '/calories',
+  path: '/calories',
+  getParentRoute: () => CalculateursRoute,
+} as any)
 const CalculateursDfgRoute = CalculateursDfgRouteImport.update({
   id: '/dfg',
   path: '/dfg',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/aliments': typeof AlimentsRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
+  '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
     | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/aliments'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
     | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
+    | '/calculateurs/calories'
     | '/calculateurs/dfg'
     | '/maladies/$slug'
     | '/regimes/$slug'
@@ -214,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalculateursIndexRouteImport
       parentRoute: typeof CalculateursRoute
     }
+    '/calculateurs/calories': {
+      id: '/calculateurs/calories'
+      path: '/calories'
+      fullPath: '/calculateurs/calories'
+      preLoaderRoute: typeof CalculateursCaloriesRouteImport
+      parentRoute: typeof CalculateursRoute
+    }
     '/calculateurs/dfg': {
       id: '/calculateurs/dfg'
       path: '/dfg'
@@ -258,11 +277,13 @@ const AlimentsRouteWithChildren = AlimentsRoute._addFileChildren(
 )
 
 interface CalculateursRouteChildren {
+  CalculateursCaloriesRoute: typeof CalculateursCaloriesRoute
   CalculateursDfgRoute: typeof CalculateursDfgRoute
   CalculateursIndexRoute: typeof CalculateursIndexRoute
 }
 
 const CalculateursRouteChildren: CalculateursRouteChildren = {
+  CalculateursCaloriesRoute: CalculateursCaloriesRoute,
   CalculateursDfgRoute: CalculateursDfgRoute,
   CalculateursIndexRoute: CalculateursIndexRoute,
 }
