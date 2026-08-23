@@ -114,3 +114,6 @@ export const foods: FoodItem[] = [
 ];
 
 export const getFood = (id: string) => foods.find((x) => x.id === id);
+/** Estimation énergétique à partir des macronutriments (Atwater), pour 100 g. */
+export const kcalPer100g = (item: FoodItem) =>
+  Math.round(item.values.proteines * 4 + item.values.glucides * 4 + item.values.lipides * 9);
