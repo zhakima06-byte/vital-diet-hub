@@ -14,6 +14,7 @@ import { Route as AlimentsRouteImport } from './routes/aliments'
 import { Route as MaladiesRouteImport } from './routes/maladies'
 import { Route as RegimesRouteImport } from './routes/regimes'
 import { Route as AlimentsIdRouteImport } from './routes/aliments.$id'
+import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 
@@ -42,6 +43,11 @@ const AlimentsIdRoute = AlimentsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AlimentsRoute,
 } as any)
+const MaladiesIndexRoute = MaladiesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MaladiesRoute,
+} as any)
 const MaladiesSlugRoute = MaladiesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -61,15 +67,16 @@ export interface FileRoutesByFullPath {
   '/aliments/$id': typeof AlimentsIdRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
-  '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/maladies': typeof MaladiesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +87,7 @@ export interface FileRoutesById {
   '/aliments/$id': typeof AlimentsIdRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
+  '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/aliments/$id'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/maladies/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/aliments'
-    | '/maladies'
     | '/regimes'
     | '/aliments/$id'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/maladies'
   id:
     | '__root__'
     | '/'
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/aliments/$id'
     | '/maladies/$slug'
     | '/regimes/$slug'
+    | '/maladies/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlimentsIdRouteImport
       parentRoute: typeof AlimentsRoute
     }
+    '/maladies/': {
+      id: '/maladies/'
+      path: '/'
+      fullPath: '/maladies/'
+      preLoaderRoute: typeof MaladiesIndexRouteImport
+      parentRoute: typeof MaladiesRoute
+    }
     '/maladies/$slug': {
       id: '/maladies/$slug'
       path: '/$slug'
@@ -186,10 +203,12 @@ const AlimentsRouteWithChildren = AlimentsRoute._addFileChildren(
 
 interface MaladiesRouteChildren {
   MaladiesSlugRoute: typeof MaladiesSlugRoute
+  MaladiesIndexRoute: typeof MaladiesIndexRoute
 }
 
 const MaladiesRouteChildren: MaladiesRouteChildren = {
   MaladiesSlugRoute: MaladiesSlugRoute,
+  MaladiesIndexRoute: MaladiesIndexRoute,
 }
 
 const MaladiesRouteWithChildren = MaladiesRoute._addFileChildren(
