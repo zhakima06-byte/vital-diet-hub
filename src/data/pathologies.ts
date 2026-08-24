@@ -39,7 +39,8 @@ export type Pathologie = {
   conseils: string[];
   signaux_alerte: string[];
   sources: string[];
-  liens?: { label: string; to: string }[];
+  liens?: { label: string; to: "/calculateurs/dfg" | "/calculateurs/calories" }[];
+  liens_fiches?: { label: string; slug: string }[];
   date_maj: string;
   motsCles: string[];
 };
@@ -105,7 +106,7 @@ export const pathologies: Pathologie[] = [
       "HAS — Fiche Bon usage : hyperuricémie et goutte",
       "ANSES — Table de composition nutritionnelle CIQUAL",
     ],
-    liens: [{ label: "Fiche calculs rénaux (lithiase urique)", to: "/maladies/calculs-renaux" }],
+    liens_fiches: [{ label: "Fiche calculs rénaux (lithiase urique)", slug: "calculs-renaux" }],
     date_maj: "2026-08-22",
     motsCles: ["goutte", "acide urique", "purines", "articulation", "hyperuricémie"],
   },
