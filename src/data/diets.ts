@@ -149,8 +149,99 @@ export const diets: Diet[] = [
       "Contre-indiqué en cas d'insuffisance rénale ou hépatique",
       "Contre-indiqué pendant la grossesse et l'allaitement",
       "Risque de carences en fibres, vitamines et minéraux",
+      "Perte hydrosodée initiale : risque de déshydratation et d'hypotension",
+      "Interactions avec les traitements antidiabétiques et antihypertenseurs (risque d'hypoglycémie)",
+    ],
+    reperes: [
+      { label: "Glucides", valeur: "20 à 50 g/jour (≈ 5–10 % de l'apport)" },
+      { label: "Lipides", valeur: "70 à 75 % de l'apport énergétique" },
+      { label: "Protéines", valeur: "1,2 à 1,5 g/kg/jour (modérées, non élevées)" },
+      { label: "Cétonémie cible", valeur: "0,5 à 3 mmol/L de bêta-hydroxybutyrate" },
+      { label: "Eau", valeur: "2 à 2,5 L/jour + sel, potassium et magnésium" },
+      { label: "Durée conseillée", valeur: "phase stricte de 8 à 12 semaines, sous suivi" },
+    ],
+    approfondissement: [
+      {
+        titre: "Comment s'installe la cétose",
+        contenu:
+          "Après 2 à 4 jours d'apport glucidique très bas, les réserves de glycogène s'épuisent et le foie produit des corps cétoniques à partir des acides gras. La cétose nutritionnelle (0,5–3 mmol/L) n'a rien à voir avec l'acidocétose diabétique (> 15 mmol/L avec hyperglycémie), qui est une urgence médicale.",
+      },
+      {
+        titre: "La « grippe cétogène »",
+        contenu:
+          "Entre le 2ᵉ et le 7ᵉ jour : fatigue, maux de tête, crampes, irritabilité, troubles du sommeil. Elle traduit surtout des pertes d'eau et d'électrolytes. Elle se corrige en augmentant l'eau, le sel (3–5 g/jour), le potassium (légumes verts, avocat) et le magnésium.",
+      },
+      {
+        titre: "Sortie du régime",
+        contenu:
+          "La reprise des glucides doit être progressive (+ 20 à 30 g par semaine, en privilégiant légumineuses, fruits et céréales complètes) pour éviter un rebond de poids et des troubles digestifs.",
+      },
+    ],
+    anomalies: [
+      "Cétose absente malgré le protocole : glucides cachés (sauces, laitages, « produits kéto ») ou excès de protéines",
+      "Fatigue, crampes, palpitations qui durent au-delà de 10 jours : déficit en eau et en électrolytes, ou apport calorique trop bas",
+      "Constipation ou transit très ralenti : manque de fibres et d'eau",
+      "Cholestérol LDL en forte hausse à 3 mois : trop de graisses saturées, à rééquilibrer vers huile d'olive, avocat, poissons gras",
+      "Haleine acétonique, soif intense et polyurie avec glycémie élevée : arrêter et consulter en urgence (suspicion d'acidocétose)",
+      "Troubles des règles, chute de cheveux, épisodes de compulsions alimentaires : régime trop restrictif, à réévaluer",
+    ],
+    evaluation: [
+      {
+        id: "keto-grossesse",
+        question: "Êtes-vous enceinte, allaitante, ou avez-vous moins de 18 ans ?",
+        drapeau: "stop",
+        explication:
+          "Le régime cétogène est contre-indiqué dans ces situations en dehors d'une indication médicale spécifique (épilepsie réfractaire encadrée à l'hôpital).",
+      },
+      {
+        id: "keto-rein-foie",
+        question: "Avez-vous une insuffisance rénale, une maladie du foie, une pancréatite ou une maladie de la vésicule biliaire ?",
+        drapeau: "stop",
+        explication:
+          "Ces pathologies contre-indiquent le régime cétogène : la charge en lipides et en protéines n'est pas métabolisable en sécurité.",
+      },
+      {
+        id: "keto-metabolique",
+        question: "Avez-vous un déficit connu du métabolisme des graisses (déficit en carnitine, en pyruvate carboxylase, porphyrie) ?",
+        drapeau: "stop",
+        explication: "Contre-indication absolue : la cétose peut déclencher une décompensation métabolique grave.",
+      },
+      {
+        id: "keto-diabete",
+        question: "Êtes-vous traité par insuline, sulfamides hypoglycémiants ou inhibiteurs SGLT2 ?",
+        drapeau: "stop",
+        explication:
+          "Risque d'hypoglycémie sévère et, sous SGLT2, d'acidocétose euglycémique. Le régime n'est envisageable qu'avec adaptation médicale préalable des doses.",
+      },
+      {
+        id: "keto-tca",
+        question: "Avez-vous ou avez-vous eu un trouble du comportement alimentaire ?",
+        drapeau: "stop",
+        explication: "Les régimes très restrictifs réactivent les conduites de restriction et de compulsion.",
+      },
+      {
+        id: "keto-tension",
+        question: "Prenez-vous un traitement pour la tension artérielle ou des diurétiques ?",
+        drapeau: "vigilance",
+        explication:
+          "La perte hydrosodée initiale majore le risque d'hypotension : surveillance de la tension et réévaluation des doses par le médecin.",
+      },
+      {
+        id: "keto-lipides",
+        question: "Avez-vous une hypercholestérolémie familiale ou un LDL élevé ?",
+        drapeau: "vigilance",
+        explication:
+          "Un contrôle du bilan lipidique à 6–12 semaines est indispensable, avec des lipides majoritairement insaturés.",
+      },
+      {
+        id: "keto-sport",
+        question: "Pratiquez-vous un sport d'intensité élevée en compétition ?",
+        drapeau: "vigilance",
+        explication: "Les performances en efforts intenses et courts baissent souvent durant les premières semaines d'adaptation.",
+      },
     ],
   },
+
   {
     slug: "vegetarien",
     name: "Régime végétarien / végan",
