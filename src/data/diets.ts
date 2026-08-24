@@ -294,8 +294,95 @@ export const diets: Diet[] = [
       "Contre-indiqué en cas de troubles du comportement alimentaire",
       "Adaptation médicale obligatoire en cas de diabète traité",
       "Déconseillé chez l'enfant, l'adolescent et la personne dénutrie",
+      "Attention aux traitements à prendre au cours d'un repas",
+    ],
+    reperes: [
+      { label: "16/8", valeur: "fenêtre alimentaire de 8 h, jeûne de 16 h (protocole le plus étudié)" },
+      { label: "14/10", valeur: "version d'entrée, bien tolérée, idéale les premières semaines" },
+      { label: "5:2", valeur: "5 jours habituels + 2 jours non consécutifs à 500–600 kcal" },
+      { label: "Jeûne alterné", valeur: "1 jour sur 2 à très faible apport — réservé à un suivi encadré" },
+      { label: "Protéines", valeur: "1,2 g/kg/jour réparties sur 2 à 3 repas pour préserver la masse musculaire" },
+      { label: "Hydratation", valeur: "1,5 à 2 L d'eau, thé ou tisane pendant la phase de jeûne" },
+    ],
+    approfondissement: [
+      {
+        titre: "Ce qui agit réellement",
+        contenu:
+          "À apport calorique égal, le jeûne intermittent ne fait pas perdre plus de poids qu'une restriction classique. Son intérêt est pratique : il simplifie les choix, supprime le grignotage du soir et convient aux personnes qui préfèrent des règles horaires à un comptage. L'alignement de la fenêtre alimentaire sur la journée (repas plus tôt) semble plus favorable au métabolisme.",
+      },
+      {
+        titre: "Démarrage progressif",
+        contenu:
+          "Semaines 1–2 : fenêtre de 12 h. Semaines 3–4 : 14 h de jeûne. Ensuite seulement 16 h, 5 jours sur 7. Conserver deux repas structurés minimum et éviter d'associer d'emblée jeûne et déficit calorique important.",
+      },
+      {
+        titre: "Sport et jeûne",
+        contenu:
+          "Les séances d'endurance modérée se pratiquent bien à jeun. Les séances intenses ou de renforcement musculaire gagnent à être placées en fin de jeûne, suivies d'un repas riche en protéines dans les deux heures.",
+      },
+    ],
+    anomalies: [
+      "Compensation par une hyperphagie à l'ouverture de la fenêtre : le protocole est trop long, revenir à 14/10",
+      "Vertiges, malaises, sueurs ou tremblements pendant le jeûne : arrêter la séance de jeûne et consulter, surtout si un traitement antidiabétique est en cours",
+      "Perte de poids rapide accompagnée d'une fonte musculaire : apport protéique insuffisant",
+      "Obsession des horaires, culpabilité à la moindre entorse, isolement social autour des repas : signes d'une dérive de type trouble alimentaire, arrêter le protocole",
+      "Troubles du sommeil, irritabilité, aménorrhée : signal d'un stress énergétique excessif",
+      "Aucun effet après 3 mois : les apports totaux sur la fenêtre restent probablement inchangés",
+    ],
+    evaluation: [
+      {
+        id: "ji-grossesse",
+        question: "Êtes-vous enceinte ou allaitante ?",
+        drapeau: "stop",
+        explication: "Les besoins énergétiques continus rendent le jeûne inadapté et potentiellement risqué pour l'enfant.",
+      },
+      {
+        id: "ji-tca",
+        question: "Avez-vous ou avez-vous eu un trouble du comportement alimentaire (anorexie, boulimie, hyperphagie) ?",
+        drapeau: "stop",
+        explication: "Le jeûne renforce le cycle restriction / compulsion et est formellement déconseillé.",
+      },
+      {
+        id: "ji-age",
+        question: "Avez-vous moins de 18 ans, plus de 75 ans, ou un IMC inférieur à 18,5 ?",
+        drapeau: "stop",
+        explication: "Croissance, dénutrition et sarcopénie sont incompatibles avec des périodes de jeûne prolongées.",
+      },
+      {
+        id: "ji-insuline",
+        question: "Êtes-vous traité par insuline ou sulfamides hypoglycémiants ?",
+        drapeau: "stop",
+        explication:
+          "Risque d'hypoglycémie sévère pendant les phases de jeûne. Un protocole n'est envisageable qu'après adaptation des doses par le médecin.",
+      },
+      {
+        id: "ji-traitement",
+        question: "Prenez-vous des médicaments à horaires fixes ou à prendre pendant les repas ?",
+        drapeau: "vigilance",
+        explication: "La fenêtre alimentaire doit être construite autour des prises médicamenteuses, avec l'avis du pharmacien ou du médecin.",
+      },
+      {
+        id: "ji-reflux",
+        question: "Souffrez-vous de reflux gastro-œsophagien, de gastrite ou de migraines fréquentes ?",
+        drapeau: "vigilance",
+        explication: "Les repas volumineux après un jeûne long et l'hypoglycémie relative peuvent aggraver ces symptômes.",
+      },
+      {
+        id: "ji-travail",
+        question: "Travaillez-vous de nuit ou en horaires décalés ?",
+        drapeau: "vigilance",
+        explication:
+          "La fenêtre alimentaire doit rester alignée sur votre rythme d'éveil ; un jeûne mal calé aggrave la fatigue et le contrôle glycémique.",
+      },
+      {
+        id: "ji-sport",
+        question: "Pratiquez-vous un sport intensif plus de 5 h par semaine ?",
+        drapeau: "vigilance",
+        explication: "Le risque de déficit énergétique relatif (perte musculaire, troubles hormonaux) impose un suivi et un apport protéique renforcé.",
+      },
     ],
   },
+
   {
     slug: "sans-gluten",
     name: "Régime sans gluten",
