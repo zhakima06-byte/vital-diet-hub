@@ -47,7 +47,7 @@ function DfgPage() {
     const c = Number(creat.replace(",", "."));
     const p = Number(poids.replace(",", "."));
     if (!a || !c) return null;
-    const dfg = calculDfg(formule, { age: a, sexe, creatinine: c, unite, poids: p || undefined });
+    const dfg = calculDfg(formule, { age: a, sexe, creatinine: c, unite, ...(p ? { poids: p } : {}) });
     if (dfg === null) return null;
     return { dfg, stade: stadeDe(dfg) };
   }, [formule, age, sexe, creat, unite, poids]);

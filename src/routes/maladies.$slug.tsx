@@ -236,14 +236,24 @@ function FichePage() {
         <Bullets items={fiche.signaux_alerte} />
       </section>
 
-      {fiche.liens && fiche.liens.length > 0 && (
+      {((fiche.liens?.length ?? 0) > 0 || (fiche.liens_fiches?.length ?? 0) > 0) && (
         <Section id="liens" title="Aller plus loin">
           <div className="mt-3 flex flex-wrap gap-2">
-            {fiche.liens.map((l) => (
+            {fiche.liens?.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+              >
+                {l.label}
+              </Link>
+            ))}
+            {fiche.liens_fiches?.map((l) => (
+              <Link
+                key={l.slug}
+                to="/maladies/$slug"
+                params={{ slug: l.slug }}
+                className="rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium"
               >
                 {l.label}
               </Link>
