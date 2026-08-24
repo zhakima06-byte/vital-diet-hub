@@ -1,3 +1,13 @@
+export type EvalQuestion = {
+  id: string;
+  question: string;
+  /** "stop" = contre-indication, "vigilance" = prudence / suivi renforcé */
+  drapeau: "stop" | "vigilance";
+  explication: string;
+};
+
+export type Repere = { label: string; valeur: string };
+
 export type Diet = {
   slug: string;
   name: string;
@@ -9,7 +19,16 @@ export type Diet = {
   journeeType: { repas: string; contenu: string }[];
   benefices: string[];
   precautions: string[];
+  /** Repères chiffrés du régime (macros, fenêtres, portions…) */
+  reperes?: Repere[];
+  /** Sections d'approfondissement affichées en accordéon */
+  approfondissement?: { titre: string; contenu: string }[];
+  /** Signaux indiquant que le régime est mal conduit ou mal toléré */
+  anomalies?: string[];
+  /** Auto-questionnaire « ce régime est-il fait pour moi ? » */
+  evaluation?: EvalQuestion[];
 };
+
 
 export const diets: Diet[] = [
   {
