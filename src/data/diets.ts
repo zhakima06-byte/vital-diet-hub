@@ -65,8 +65,65 @@ export const diets: Diet[] = [
     ],
     precautions: [
       "Attention à la densité calorique de l'huile d'olive et des oléagineux en cas d'objectif de perte de poids",
+      "Adapter les portions de poisson en cas de grossesse (limiter les gros poissons prédateurs)",
+      "Surveiller les apports en potassium en cas d'insuffisance rénale avancée",
+    ],
+    reperes: [
+      { label: "Répartition indicative", valeur: "45–50 % glucides · 30–40 % lipides · 15–20 % protéines" },
+      { label: "Huile d'olive", valeur: "3 à 4 cuillères à soupe par jour" },
+      { label: "Poisson", valeur: "2 à 3 portions/semaine dont 1 poisson gras" },
+      { label: "Légumineuses", valeur: "3 à 4 portions/semaine" },
+      { label: "Viande rouge", valeur: "≤ 1 à 2 portions/semaine" },
+      { label: "Sel", valeur: "≤ 5 g/jour (herbes et épices en remplacement)" },
+    ],
+    approfondissement: [
+      {
+        titre: "Pourquoi ce régime est la référence",
+        contenu:
+          "Le régime méditerranéen est le modèle alimentaire le plus étudié : essais d'intervention et cohortes convergent vers une réduction des événements cardiovasculaires, un meilleur contrôle glycémique et une mortalité globale plus basse. Son intérêt tient à l'ensemble du modèle (aliments peu transformés, fibres, acides gras mono-insaturés, polyphénols) plus qu'à un aliment isolé.",
+      },
+      {
+        titre: "Mise en pratique semaine par semaine",
+        contenu:
+          "Semaine 1 : remplacer beurre et huiles raffinées par de l'huile d'olive vierge extra. Semaine 2 : introduire deux repas de légumineuses. Semaine 3 : passer aux céréales complètes et ajouter un fruit à chaque repas. Semaine 4 : réduire la viande rouge et la charcuterie à une fois par semaine, ajouter deux repas de poisson.",
+      },
+      {
+        titre: "Au-delà de l'assiette",
+        contenu:
+          "Le modèle inclut l'activité physique quotidienne, la convivialité des repas, la cuisine maison, le respect de la saisonnalité et un temps de repas suffisant. Ces éléments font partie intégrante des bénéfices observés.",
+      },
+    ],
+    anomalies: [
+      "Prise de poids malgré le régime : portions d'huile, de fromage et d'oléagineux probablement trop généreuses",
+      "Ballonnements persistants à l'introduction des légumineuses : augmenter les quantités très progressivement",
+      "Sensation de faim permanente : apport en protéines ou en féculents complets insuffisant",
+      "Aucun changement des bilans lipidiques après 3 mois : vérifier la part réelle de produits ultra-transformés",
+    ],
+    evaluation: [
+      {
+        id: "med-renal",
+        question: "Avez-vous une insuffisance rénale avec restriction en potassium ou en protéines ?",
+        drapeau: "vigilance",
+        explication:
+          "Le régime est riche en fruits, légumes et légumineuses, donc en potassium. Il doit être adapté par un diététicien en cas d'insuffisance rénale avancée.",
+      },
+      {
+        id: "med-poids",
+        question: "Cherchez-vous une perte de poids rapide et importante ?",
+        drapeau: "vigilance",
+        explication:
+          "Le régime méditerranéen agit progressivement. Un cadrage des portions caloriques (huile, oléagineux, fromages) est nécessaire pour obtenir une perte de poids.",
+      },
+      {
+        id: "med-allergie",
+        question: "Êtes-vous allergique aux fruits à coque ou au poisson ?",
+        drapeau: "vigilance",
+        explication:
+          "Ces aliments sont centraux : des substitutions (graines, huile de colza, légumineuses) doivent être prévues pour couvrir les oméga-3.",
+      },
     ],
   },
+
   {
     slug: "keto",
     name: "Régime cétogène (kéto)",
