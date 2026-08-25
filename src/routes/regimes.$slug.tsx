@@ -77,6 +77,20 @@ function DietPage() {
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{diet.principe}</p>
       </section>
 
+      {diet.reperes?.length ? (
+        <section className="card-soft mt-4 p-5">
+          <h2 className="text-base font-semibold">Repères chiffrés</h2>
+          <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+            {diet.reperes.map((r) => (
+              <div key={r.label} className="rounded-xl border border-border/70 p-3">
+                <dt className="text-sm font-medium">{r.label}</dt>
+                <dd className="mt-0.5 text-sm text-muted-foreground">{r.valeur}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
+
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <ListCard title="Aliments à privilégier" items={diet.privilegier} tone="low" />
         <ListCard title="Aliments à limiter" items={diet.limiter} tone="mid" />
@@ -94,10 +108,32 @@ function DietPage() {
         </ul>
       </section>
 
+      {diet.approfondissement?.length ? (
+        <section className="card-soft mt-4 p-5">
+          <h2 className="text-base font-semibold">Pour aller plus loin</h2>
+          <div className="mt-3 space-y-3">
+            {diet.approfondissement.map((s) => (
+              <details key={s.titre} className="rounded-xl border border-border/70 p-3">
+                <summary className="cursor-pointer text-sm font-medium">{s.titre}</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.contenu}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <ListCard title="Bénéfices attendus" items={diet.benefices} tone="low" />
         <ListCard title="Précautions et contre-indications" items={diet.precautions} tone="high" />
       </div>
+
+      {diet.anomalies?.length ? (
+        <div className="mt-4">
+          <ListCard title="Signaux d'anomalie : régime mal conduit ou mal toléré" items={diet.anomalies} tone="high" />
+        </div>
+      ) : null}
+
+      {diet.evaluation?.length ? <DietSelfCheck dietName={diet.name} questions={diet.evaluation} /> : null}
 
       <div className="mt-6">
         <MedicalDisclaimer />
