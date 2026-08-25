@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
+import { DietSelfCheck } from "@/components/DietSelfCheck";
 import { getDiet } from "@/data/diets";
 
 export const Route = createFileRoute("/regimes/$slug")({
