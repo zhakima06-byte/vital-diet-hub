@@ -104,6 +104,16 @@
   --level-high: oklch(0.62 0.19 25);
   --level-high-soft: oklch(0.95 0.04 25);
   --brand-deep: oklch(0.38 0.09 165);
+
+  /* Charte modules : bleu (compteur), rose (jeûne), vert (méditerranéen), violet (keto) */
+  --tone-blue: oklch(0.55 0.14 250);
+  --tone-blue-soft: oklch(0.95 0.03 250);
+  --tone-pink: oklch(0.62 0.16 355);
+  --tone-pink-soft: oklch(0.96 0.03 355);
+  --tone-green: oklch(0.55 0.13 155);
+  --tone-green-soft: oklch(0.95 0.04 155);
+  --tone-violet: oklch(0.52 0.17 300);
+  --tone-violet-soft: oklch(0.95 0.04 300);
   --gradient-brand: linear-gradient(135deg, oklch(0.55 0.12 160), oklch(0.68 0.13 190));
   --shadow-soft: 0 8px 30px -12px oklch(0.4 0.08 165 / 0.28);
   --font-display: "Fraunces", Georgia, serif;
@@ -153,6 +163,14 @@
   --color-level-high: var(--level-high);
   --color-level-high-soft: var(--level-high-soft);
   --color-brand-deep: var(--brand-deep);
+  --color-tone-blue: var(--tone-blue);
+  --color-tone-blue-soft: var(--tone-blue-soft);
+  --color-tone-pink: var(--tone-pink);
+  --color-tone-pink-soft: var(--tone-pink-soft);
+  --color-tone-green: var(--tone-green);
+  --color-tone-green-soft: var(--tone-green-soft);
+  --color-tone-violet: var(--tone-violet);
+  --color-tone-violet-soft: var(--tone-violet-soft);
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --shadow-soft: var(--shadow-soft);
@@ -187,4 +205,36 @@
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-soft);
+}
+
+/* --- Impression A4 des fiches --- */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+  }
 }
