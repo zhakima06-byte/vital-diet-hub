@@ -19,7 +19,7 @@ const navMobile = nav.filter((n) =>
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen pb-24 md:pb-0">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+      <header className="no-print sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
@@ -45,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
 
-      <footer className="mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs text-muted-foreground">
+      <footer className="no-print mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs text-muted-foreground">
         <p>
           NutriSanté a une vocation informative et éducative. L'application ne remplace pas une
           consultation médicale ni un suivi diététique individualisé.
