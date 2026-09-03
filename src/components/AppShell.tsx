@@ -1,19 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Home, Salad, Stethoscope, Apple, Leaf, Calculator } from "lucide-react";
+import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame } from "lucide-react";
 
 const nav = [
   { to: "/", label: "Accueil", icon: Home },
   { to: "/regimes", label: "Régimes", icon: Salad },
+  { to: "/fiches-regimes", label: "Fiches", icon: FileDown },
+  { to: "/compteur", label: "Compteur", icon: Flame },
   { to: "/maladies", label: "Pathologies", icon: Stethoscope },
   { to: "/calculateurs", label: "Calculs", icon: Calculator },
   { to: "/aliments", label: "Aliments", icon: Apple },
 ] as const;
 
+const navMobile = nav.filter((n) =>
+  ["/", "/fiches-regimes", "/compteur", "/maladies", "/aliments"].includes(n.to),
+);
+
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen pb-24 md:pb-0">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+      <header className="no-print sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
@@ -39,16 +45,16 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
 
-      <footer className="mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs text-muted-foreground">
+      <footer className="no-print mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs text-muted-foreground">
         <p>
           NutriSanté a une vocation informative et éducative. L'application ne remplace pas une
           consultation médicale ni un suivi diététique individualisé.
         </p>
       </footer>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-md">
-          {nav.map((item) => {
+          {navMobile.map((item) => {
             const Icon = item.icon;
             return (
               <Link

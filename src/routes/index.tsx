@@ -1,9 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Apple, Flame, Salad, Stethoscope } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Apple, FileDown, Flame, LineChart, Salad, Stethoscope } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { diets } from "@/data/diets";
 import { diseases } from "@/data/diseases";
+import { fichesRegimes, tonClasses } from "@/data/fichesRegimes";
+import {
+  objectifFromStatut,
+  saveProfil,
+  statutFromImc,
+  statutLabel,
+  type Activite as ActiviteProfil,
+  type Objectif as ObjectifProfil,
+  type Sexe as SexeProfil,
+} from "@/lib/profil";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -98,6 +108,22 @@ function Index() {
 
   const gaugePct = result ? Math.min(100, Math.max(2, ((result.imc - 14) / 28) * 100)) : 0;
   const sheet = diseases.find((d) => d.slug === pathologie);
+  const statut = result ? statutFromImc(result.imc) : null;
+
+  useEffect(() => {
+    if (!result || !statut) return;
+    saveProfil({
+      poids: Number(poids),
+      taille: Number(taille),
+      age: Number(age),
+      sexe: sexe as SexeProfil,
+      activite: activite as ActiviteProfil,
+      objectif: (objectif === "maintien" ? objectifFromStatut(statut) : objectif) as ObjectifProfil,
+      imc: result.imc,
+      statut,
+      majAt: new Date().toISOString(),
+    });
+  }, [result, statut, poids, taille, age, sexe, activite, objectif]);
 
   return (
     <AppShell>
@@ -291,6 +317,64 @@ function Index() {
           )}
         </div>
       </section>
+
+      {result && statut && (
+        <section className="card-soft mt-6 border-tone-blue/40 p-5">
+          <h2 className="text-lg font-semibold">
+            Et maintenant ? Votre statut : {statutLabel[statut]}
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Vos données (poids, taille, âge, sexe, activité) sont enregistrées : aucun besoin de les
+            ressaisir dans les modules ci-dessous.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <Link
+              to="/fiches-regimes"
+              className="flex items-start gap-3 rounded-2xl border border-tone-green/40 bg-tone-green-soft p-4"
+            >
+              <FileDown className="size-5 shrink-0 text-tone-green" />
+              <span>
+                <span className="block text-sm font-semibold text-tone-green">
+                  Télécharger une fiche régime
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  Méditerranéen, Keto ou intermittent — PDF A4 prêt à imprimer.
+                </span>
+              </span>
+            </Link>
+            <Link
+              to="/compteur"
+              className="flex items-start gap-3 rounded-2xl border border-tone-blue/40 bg-tone-blue-soft p-4"
+            >
+              <LineChart className="size-5 shrink-0 text-tone-blue" />
+              <span>
+                <span className="block text-sm font-semibold text-tone-blue">
+                  Suivre mes calories
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  Objectif du jour calculé depuis votre IMC et suivi par repas.
+                </span>
+              </span>
+            </Link>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {fichesRegimes.map((f) => {
+              const t = tonClasses[f.ton];
+              return (
+                <Link
+                  key={f.slug}
+                  to="/fiches-regimes/$slug"
+                  params={{ slug: f.slug }}
+                  className={`rounded-2xl border p-3 text-sm font-medium ${t.border} ${t.soft} ${t.text}`}
+                >
+                  {f.emoji} {f.nom}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="mt-6 grid gap-4 sm:grid-cols-3">
         <Link to="/regimes" className="card-soft p-5">
