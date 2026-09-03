@@ -19,6 +19,8 @@ import { Route as AlimentsIdRouteImport } from './routes/aliments.$id'
 import { Route as CalculateursIndexRouteImport } from './routes/calculateurs.index'
 import { Route as CalculateursCaloriesRouteImport } from './routes/calculateurs.calories'
 import { Route as CalculateursDfgRouteImport } from './routes/calculateurs.dfg'
+import { Route as FichesRegimesIndexRouteImport } from './routes/fiches-regimes.index'
+import { Route as FichesRegimesSlugRouteImport } from './routes/fiches-regimes.$slug'
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
@@ -73,6 +75,16 @@ const CalculateursDfgRoute = CalculateursDfgRouteImport.update({
   path: '/dfg',
   getParentRoute: () => CalculateursRoute,
 } as any)
+const FichesRegimesIndexRoute = FichesRegimesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FichesRegimesRoute,
+} as any)
+const FichesRegimesSlugRoute = FichesRegimesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FichesRegimesRoute,
+} as any)
 const MaladiesIndexRoute = MaladiesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -93,28 +105,31 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
   '/calculateurs': typeof CalculateursRouteWithChildren
-  '/fiches-regimes': typeof FichesRegimesRoute
+  '/fiches-regimes': typeof FichesRegimesRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
+  '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
+  '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
-  '/fiches-regimes': typeof FichesRegimesRoute
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
+  '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs': typeof CalculateursIndexRoute
+  '/fiches-regimes': typeof FichesRegimesIndexRoute
   '/maladies': typeof MaladiesIndexRoute
 }
 export interface FileRoutesById {
@@ -122,15 +137,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
   '/calculateurs': typeof CalculateursRouteWithChildren
-  '/fiches-regimes': typeof FichesRegimesRoute
+  '/fiches-regimes': typeof FichesRegimesRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
+  '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
+  '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
 }
 export interface FileRouteTypes {
@@ -145,22 +162,25 @@ export interface FileRouteTypes {
     | '/aliments/$id'
     | '/calculateurs/calories'
     | '/calculateurs/dfg'
+    | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/regimes/$slug'
     | '/calculateurs/'
+    | '/fiches-regimes/'
     | '/maladies/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/aliments'
-    | '/fiches-regimes'
     | '/regimes'
     | '/aliments/$id'
     | '/calculateurs/calories'
     | '/calculateurs/dfg'
+    | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/regimes/$slug'
     | '/calculateurs'
+    | '/fiches-regimes'
     | '/maladies'
   id:
     | '__root__'
@@ -173,9 +193,11 @@ export interface FileRouteTypes {
     | '/aliments/$id'
     | '/calculateurs/calories'
     | '/calculateurs/dfg'
+    | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/regimes/$slug'
     | '/calculateurs/'
+    | '/fiches-regimes/'
     | '/maladies/'
   fileRoutesById: FileRoutesById
 }
@@ -183,7 +205,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlimentsRoute: typeof AlimentsRouteWithChildren
   CalculateursRoute: typeof CalculateursRouteWithChildren
-  FichesRegimesRoute: typeof FichesRegimesRoute
+  FichesRegimesRoute: typeof FichesRegimesRouteWithChildren
   MaladiesRoute: typeof MaladiesRouteWithChildren
   RegimesRoute: typeof RegimesRouteWithChildren
 }
@@ -260,6 +282,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalculateursDfgRouteImport
       parentRoute: typeof CalculateursRoute
     }
+    '/fiches-regimes/': {
+      id: '/fiches-regimes/'
+      path: '/'
+      fullPath: '/fiches-regimes/'
+      preLoaderRoute: typeof FichesRegimesIndexRouteImport
+      parentRoute: typeof FichesRegimesRoute
+    }
+    '/fiches-regimes/$slug': {
+      id: '/fiches-regimes/$slug'
+      path: '/$slug'
+      fullPath: '/fiches-regimes/$slug'
+      preLoaderRoute: typeof FichesRegimesSlugRouteImport
+      parentRoute: typeof FichesRegimesRoute
+    }
     '/maladies/': {
       id: '/maladies/'
       path: '/'
@@ -312,6 +348,20 @@ const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
   CalculateursRouteChildren,
 )
 
+interface FichesRegimesRouteChildren {
+  FichesRegimesSlugRoute: typeof FichesRegimesSlugRoute
+  FichesRegimesIndexRoute: typeof FichesRegimesIndexRoute
+}
+
+const FichesRegimesRouteChildren: FichesRegimesRouteChildren = {
+  FichesRegimesSlugRoute: FichesRegimesSlugRoute,
+  FichesRegimesIndexRoute: FichesRegimesIndexRoute,
+}
+
+const FichesRegimesRouteWithChildren = FichesRegimesRoute._addFileChildren(
+  FichesRegimesRouteChildren,
+)
+
 interface MaladiesRouteChildren {
   MaladiesSlugRoute: typeof MaladiesSlugRoute
   MaladiesIndexRoute: typeof MaladiesIndexRoute
@@ -341,7 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlimentsRoute: AlimentsRouteWithChildren,
   CalculateursRoute: CalculateursRouteWithChildren,
-  FichesRegimesRoute: FichesRegimesRoute,
+  FichesRegimesRoute: FichesRegimesRouteWithChildren,
   MaladiesRoute: MaladiesRouteWithChildren,
   RegimesRoute: RegimesRouteWithChildren,
 }
