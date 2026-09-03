@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlimentsRouteImport } from './routes/aliments'
 import { Route as CalculateursRouteImport } from './routes/calculateurs'
+import { Route as FichesRegimesRouteImport } from './routes/fiches-regimes'
 import { Route as MaladiesRouteImport } from './routes/maladies'
 import { Route as RegimesRouteImport } from './routes/regimes'
 import { Route as AlimentsIdRouteImport } from './routes/aliments.$id'
@@ -35,6 +36,11 @@ const AlimentsRoute = AlimentsRouteImport.update({
 const CalculateursRoute = CalculateursRouteImport.update({
   id: '/calculateurs',
   path: '/calculateurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FichesRegimesRoute = FichesRegimesRouteImport.update({
+  id: '/fiches-regimes',
+  path: '/fiches-regimes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaladiesRoute = MaladiesRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
   '/calculateurs': typeof CalculateursRouteWithChildren
+  '/fiches-regimes': typeof FichesRegimesRoute
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
+  '/fiches-regimes': typeof FichesRegimesRoute
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
   '/calculateurs': typeof CalculateursRouteWithChildren
+  '/fiches-regimes': typeof FichesRegimesRoute
   '/maladies': typeof MaladiesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/'
     | '/aliments'
     | '/calculateurs'
+    | '/fiches-regimes'
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aliments'
+    | '/fiches-regimes'
     | '/regimes'
     | '/aliments/$id'
     | '/calculateurs/calories'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/aliments'
     | '/calculateurs'
+    | '/fiches-regimes'
     | '/maladies'
     | '/regimes'
     | '/aliments/$id'
@@ -171,6 +183,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlimentsRoute: typeof AlimentsRouteWithChildren
   CalculateursRoute: typeof CalculateursRouteWithChildren
+  FichesRegimesRoute: typeof FichesRegimesRoute
   MaladiesRoute: typeof MaladiesRouteWithChildren
   RegimesRoute: typeof RegimesRouteWithChildren
 }
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/calculateurs'
       fullPath: '/calculateurs'
       preLoaderRoute: typeof CalculateursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fiches-regimes': {
+      id: '/fiches-regimes'
+      path: '/fiches-regimes'
+      fullPath: '/fiches-regimes'
+      preLoaderRoute: typeof FichesRegimesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/maladies': {
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlimentsRoute: AlimentsRouteWithChildren,
   CalculateursRoute: CalculateursRouteWithChildren,
+  FichesRegimesRoute: FichesRegimesRoute,
   MaladiesRoute: MaladiesRouteWithChildren,
   RegimesRoute: RegimesRouteWithChildren,
 }
