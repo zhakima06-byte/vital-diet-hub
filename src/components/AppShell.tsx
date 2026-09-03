@@ -1,14 +1,20 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Home, Salad, Stethoscope, Apple, Leaf, Calculator } from "lucide-react";
+import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame } from "lucide-react";
 
 const nav = [
   { to: "/", label: "Accueil", icon: Home },
   { to: "/regimes", label: "Régimes", icon: Salad },
+  { to: "/fiches-regimes", label: "Fiches", icon: FileDown },
+  { to: "/compteur", label: "Compteur", icon: Flame },
   { to: "/maladies", label: "Pathologies", icon: Stethoscope },
   { to: "/calculateurs", label: "Calculs", icon: Calculator },
   { to: "/aliments", label: "Aliments", icon: Apple },
 ] as const;
+
+const navMobile = nav.filter((n) =>
+  ["/", "/fiches-regimes", "/compteur", "/maladies", "/aliments"].includes(n.to),
+);
 
 export function AppShell({ children }: { children: ReactNode }) {
   return (
@@ -46,9 +52,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         </p>
       </footer>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-md">
-          {nav.map((item) => {
+          {navMobile.map((item) => {
             const Icon = item.icon;
             return (
               <Link
