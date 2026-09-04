@@ -45,7 +45,7 @@ function Liste({
   );
 }
 
-type Props = { fiche: FicheRegime; menu?: Menu7j };
+type Props = { fiche: FicheRegime; menu?: Menu7j | undefined };
 
 /** Rendu A4 de la fiche : utilisé pour l'aperçu écran, l'impression et l'export PDF. */
 export const FicheRegimeSheet = forwardRef<HTMLDivElement, Props>(function FicheRegimeSheet(
