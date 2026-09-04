@@ -25,7 +25,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
               <Leaf className="size-5" />
             </span>
-            <span className="font-display text-lg font-semibold">NutriSanté</span>
+            <div className="flex flex-col leading-tight">
+              <span className="font-display text-lg font-semibold">NutriSanté</span>
+              <span className="text-[11px] font-medium text-tone-blue">Dr ZALEGH</span>
+            </div>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {nav.map((item) => (
