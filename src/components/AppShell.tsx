@@ -27,7 +27,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
             <div className="flex flex-col leading-tight">
               <span className="font-display text-lg font-semibold">NutriSanté</span>
-              <span className="text-[11px] font-medium text-tone-blue">Dr ZALEGH</span>
+              <span className="font-display text-lg font-bold text-tone-blue">Dr ZALEGH</span>
             </div>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
