@@ -6,7 +6,8 @@ export type NutrientKey =
   | "calcium"
   | "potassium"
   | "sodium"
-  | "citrate";
+  | "citrate"
+  | "zinc";
 
 export type FoodItem = {
   id: string;
@@ -30,6 +31,7 @@ export const nutrients: {
   { key: "potassium", label: "Potassium", unit: "mg", thresholds: [150, 350] },
   { key: "sodium", label: "Sodium", unit: "mg", thresholds: [50, 300] },
   { key: "citrate", label: "Citrate", unit: "mg", thresholds: [20, 200] },
+  { key: "zinc", label: "Zinc", unit: "mg", thresholds: [1, 3] },
 ];
 
 export type Level = "faible" | "modere" | "eleve";
@@ -51,7 +53,7 @@ const f = (
   id: string,
   name: string,
   category: string,
-  v: [number, number, number, number, number, number, number, number],
+  v: [number, number, number, number, number, number, number, number, number],
 ): FoodItem => ({
   id,
   name,
@@ -65,6 +67,7 @@ const f = (
     potassium: v[5],
     sodium: v[6],
     citrate: v[7],
+    zinc: v[8],
   },
 });
 
@@ -111,6 +114,19 @@ export const foods: FoodItem[] = [
   f("eau-minerale", "Eau minérale calcique", "Boissons", [0, 0, 0, 0, 47, 3, 8, 0, 0]),
   f("tofu", "Tofu nature", "Végétal protéiné", [120, 12, 2, 7, 200, 150, 8, 3, 1.6]),
   f("quinoa", "Quinoa cuit", "Féculents", [150, 4.4, 21, 1.9, 17, 170, 5, 3, 1.1]),
+  f("huitre", "Huîtres crues", "Fruits de mer", [135, 9, 4.5, 2, 80, 190, 500, 2, 45]),
+  f("crabe", "Crabe cuit", "Fruits de mer", [220, 19, 0, 1.5, 90, 260, 450, 2, 5.5]),
+  f("homard", "Homard cuit", "Fruits de mer", [200, 19, 0, 1, 60, 300, 420, 2, 3]),
+  f("moule", "Moules cuites", "Fruits de mer", [240, 24, 7, 4, 50, 270, 370, 2, 2.7]),
+  f("agneau", "Agneau cuit", "Viandes", [190, 25, 0, 12, 12, 310, 70, 2, 4]),
+  f("porc", "Porc cuit", "Viandes", [210, 26, 0, 9, 10, 340, 65, 2, 2.5]),
+  f("dinde", "Dinde cuite", "Viandes", [215, 29, 0, 2, 12, 330, 65, 2, 2]),
+  f("graines-courge", "Graines de courge", "Oléagineux", [1200, 30, 11, 49, 46, 810, 7, 5, 8]),
+  f("sesame", "Graines de sésame / tahini", "Oléagineux", [630, 18, 12, 54, 960, 470, 11, 5, 6]),
+  f("noix-cajou", "Noix de cajou", "Oléagineux", [590, 18, 27, 44, 37, 660, 12, 5, 5.5]),
+  f("cacahuete", "Cacahuètes", "Oléagineux", [380, 26, 12, 49, 55, 700, 6, 5, 3]),
+  f("parmesan", "Parmesan", "Produits laitiers", [700, 36, 0.5, 29, 1180, 100, 1500, 20, 3.5]),
+  f("champignon", "Champignons de Paris", "Légumes", [86, 3, 1, 0.3, 6, 320, 6, 10, 0.5]),
 ];
 
 export const getFood = (id: string) => foods.find((x) => x.id === id);
