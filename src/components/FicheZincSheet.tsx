@@ -9,7 +9,7 @@ import {
 } from "@/data/zinc";
 
 /** Rendu A4 de la fiche zinc : aperçu écran, impression et export PDF. */
-export const FicheZincSheet = forwardRef<HTMLDivElement, Record<string, never>>(
+export const FicheZincSheet = forwardRef<HTMLDivElement, object>(
   function FicheZincSheet(_props, ref) {
     const bleu = "var(--tone-blue)";
 
