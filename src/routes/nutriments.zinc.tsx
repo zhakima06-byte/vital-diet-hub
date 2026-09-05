@@ -186,7 +186,7 @@ function ZincPage() {
                 className="rounded-full border px-3 py-1.5 text-xs font-medium"
                 style={
                   filtre === c.key
-                    ? { borderColor: c.couleur, background: c.couleur, color: "white" }
+                    ? { borderColor: c.couleur, background: c.couleur, color: "var(--primary-foreground)" }
                     : { borderColor: c.couleur, color: c.couleur, background: c.fond }
                 }
               >
@@ -269,7 +269,7 @@ function ZincPage() {
           <button
             onClick={telecharger}
             disabled={busy}
-            className="inline-flex items-center gap-2 rounded-xl bg-tone-blue px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-tone-blue px-4 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
           >
             <Download className="size-4" />
             {busy ? "Génération…" : "Télécharger en PDF"}
@@ -283,7 +283,7 @@ function ZincPage() {
         </div>
       </div>
 
-      <div className={apercu ? "mt-6" : "sr-only"}>
+      <div className={apercu ? "mt-6" : "pointer-events-none absolute -left-[9999px] top-0 w-[794px]"} aria-hidden={!apercu}>
         <FicheZincSheet ref={sheetRef} />
       </div>
     </AppShell>

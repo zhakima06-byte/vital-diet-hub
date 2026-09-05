@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame } from "lucide-react";
+import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame, Sparkles } from "lucide-react";
 
 const nav = [
   { to: "/", label: "Accueil", icon: Home },
@@ -10,6 +10,7 @@ const nav = [
   { to: "/maladies", label: "Pathologies", icon: Stethoscope },
   { to: "/calculateurs", label: "Calculs", icon: Calculator },
   { to: "/aliments", label: "Aliments", icon: Apple },
+  { to: "/nutriments/zinc", label: "Zinc", icon: Sparkles },
 ] as const;
 
 const navMobile = nav.filter((n) =>
