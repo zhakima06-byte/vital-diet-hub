@@ -3,6 +3,13 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { foods, kcalPer100g } from "@/data/foods";
+import {
+  calculateNutritionNeeds,
+  type ActiviteKey,
+  type ObjectifKey,
+  type ProfilNutritionnel,
+} from "@/lib/nutrition";
+
 
 export const Route = createFileRoute("/calculateurs/calories")({
   head: () => ({
@@ -23,17 +30,26 @@ export const Route = createFileRoute("/calculateurs/calories")({
 });
 
 const activites = [
-  { key: "sedentaire", label: "Sédentaire", factor: 1.2 },
-  { key: "leger", label: "Léger (1-3 j/sem.)", factor: 1.375 },
-  { key: "modere", label: "Modéré (3-5 j/sem.)", factor: 1.55 },
-  { key: "actif", label: "Actif (6-7 j/sem.)", factor: 1.725 },
-  { key: "tres-actif", label: "Très actif", factor: 1.9 },
+  { key: "sedentaire", label: "Sédentaire" },
+  { key: "leger", label: "Léger (1-3 j/sem.)" },
+  { key: "modere", label: "Modéré (3-5 j/sem.)" },
+  { key: "actif", label: "Actif (6-7 j/sem.)" },
+  { key: "tres-actif", label: "Très actif" },
 ] as const;
 
 const objectifs = [
-  { key: "perte", label: "Perte de poids", delta: -0.2 },
-  { key: "maintien", label: "Maintien", delta: 0 },
-  { key: "prise", label: "Prise de poids", delta: 0.15 },
+  { key: "perte", label: "Perte de poids" },
+  { key: "maintien", label: "Maintien" },
+  { key: "prise", label: "Prise de poids" },
+] as const;
+
+const profils = [
+  { key: "adulte", label: "Adulte général" },
+  { key: "sportif", label: "Sportif" },
+  { key: "diabete", label: "Diabète" },
+  { key: "hypertension", label: "Hypertension" },
+  { key: "goutte", label: "Goutte / hyperuricémie" },
+  { key: "renale", label: "Maladie rénale chronique" },
 ] as const;
 
 const field = "mt-1 w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring";
@@ -48,17 +64,24 @@ function CaloriesPage() {
   const [sexe, setSexe] = useState<"H" | "F">("F");
   const [poids, setPoids] = useState("65");
   const [taille, setTaille] = useState("168");
-  const [activite, setActivite] = useState<(typeof activites)[number]["key"]>("modere");
-  const [objectif, setObjectif] = useState<(typeof objectifs)[number]["key"]>("maintien");
+  const [activite, setActivite] = useState<ActiviteKey>("modere");
+  const [objectif, setObjectif] = useState<ObjectifKey>("maintien");
+  const [profilClinique, setProfilClinique] = useState<ProfilNutritionnel>("adulte");
 
-  const besoins = useMemo(() => {
-    const a = Number(age), p = Number(poids), t = Number(taille);
-    if (!a || !p || !t) return null;
-    const mb = 10 * p + 6.25 * t - 5 * a + (sexe === "H" ? 5 : -161);
-    const det = mb * activites.find((x) => x.key === activite)!.factor;
-    const cible = det * (1 + objectifs.find((x) => x.key === objectif)!.delta);
-    return { mb: Math.round(mb), det: Math.round(det), cible: Math.round(cible) };
-  }, [age, poids, taille, sexe, activite, objectif]);
+  const besoins = useMemo(
+    () =>
+      calculateNutritionNeeds({
+        sexe: sexe === "H" ? "homme" : "femme",
+        age: Number(age),
+        poids: Number(poids.replace(",", ".")),
+        taille: Number(taille.replace(",", ".")),
+        activite,
+        objectif,
+        profil: profilClinique,
+      }),
+    [age, poids, taille, sexe, activite, objectif, profilClinique],
+  );
+
 
   // Repas
   const [lignes, setLignes] = useState<Ligne[]>([]);
@@ -81,7 +104,7 @@ function CaloriesPage() {
     );
   }, [lignes]);
 
-  const cible = besoins?.cible ?? 0;
+  const cible = besoins.valide ? besoins.caloriesCibles : 0;
   const pct = cible ? Math.min(100, Math.round((totaux.kcal / cible) * 100)) : 0;
   const macroKcal = totaux.prot * 4 + totaux.gluc * 4 + totaux.lip * 9 || 1;
   const parts = {
@@ -161,24 +184,113 @@ function CaloriesPage() {
                 ))}
               </select>
             </label>
+            <label className="block text-sm sm:col-span-2">
+              Contexte de santé (adapte l'apport protéique)
+              <select
+                value={profilClinique}
+                onChange={(e) => setProfilClinique(e.target.value as ProfilNutritionnel)}
+                className={field}
+              >
+                {profils.map((p) => (
+                  <option key={p.key} value={p.key}>{p.label}</option>
+                ))}
+              </select>
+            </label>
           </div>
 
-          {besoins && (
-            <div className="mt-4 grid gap-4 sm:grid-cols-3">
-              <div className="card-soft p-5">
-                <p className="text-sm text-muted-foreground">Métabolisme de base</p>
-                <p className="mt-1 text-2xl font-semibold">{besoins.mb} kcal</p>
+
+          {besoins.valide ? (
+            <>
+              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                <div className="card-soft p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Métabolisme basal (MB)
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {besoins.bmr} <span className="text-base font-normal text-muted-foreground">kcal/jour</span>
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Énergie consommée au repos complet, pour les fonctions vitales.
+                  </p>
+                </div>
+                <div className="card-soft p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Dépense quotidienne (DET)
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {besoins.tdee} <span className="text-base font-normal text-muted-foreground">kcal/jour</span>
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Métabolisme basal multiplié par votre niveau d'activité (×{besoins.facteurActivite}).
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                    Objectif calorique
+                  </p>
+                  <p className="mt-1 text-3xl font-semibold">
+                    {besoins.caloriesCibles} <span className="text-base font-normal text-muted-foreground">kcal/jour</span>
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {besoins.ajustement === 0
+                      ? "Apport de maintien : ni déficit ni surplus."
+                      : `${besoins.ajustement > 0 ? "Surplus" : "Déficit"} modéré de ${Math.abs(besoins.ajustement)} kcal par rapport à votre dépense.`}
+                  </p>
+                </div>
               </div>
-              <div className="card-soft p-5">
-                <p className="text-sm text-muted-foreground">Dépense totale (DET)</p>
-                <p className="mt-1 text-2xl font-semibold">{besoins.det} kcal</p>
+
+              <div className="card-soft mt-4 p-5">
+                <h2 className="text-base font-semibold">Répartition des macronutriments</h2>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Calculée sur l'objectif de {besoins.caloriesCibles} kcal/jour, avec{" "}
+                  {besoins.proteinesParKg} g de protéines par kg de poids corporel.
+                </p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {[
+                    {
+                      label: "Protéines",
+                      m: besoins.macros.proteines,
+                      aide: "Maintien de la masse musculaire et des défenses (4 kcal/g).",
+                    },
+                    {
+                      label: "Glucides",
+                      m: besoins.macros.glucides,
+                      aide: "Carburant principal du cerveau et des muscles (4 kcal/g).",
+                    },
+                    {
+                      label: "Lipides",
+                      m: besoins.macros.lipides,
+                      aide: "Hormones, vitamines A/D/E/K et satiété (9 kcal/g).",
+                    },
+                  ].map(({ label, m, aide }) => (
+                    <div key={label} className="rounded-xl border border-border p-4">
+                      <p className="text-sm font-medium">{label}</p>
+                      <p className="mt-1 text-xl font-semibold">
+                        {m.grammes} <span className="text-sm font-normal text-muted-foreground">g/jour</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {m.kcal} kcal · {m.pourcentage} % de l'énergie
+                      </p>
+                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                        <div className="h-full rounded-full bg-gradient-brand" style={{ width: `${m.pourcentage}%` }} />
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">{aide}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
-                <p className="text-sm text-muted-foreground">Objectif journalier</p>
-                <p className="mt-1 text-2xl font-semibold">{besoins.cible} kcal</p>
-              </div>
+            </>
+          ) : (
+            <div className="mt-4 rounded-2xl border border-level-mid/40 bg-level-mid-soft p-5 text-sm">
+              <p className="font-medium">Vérifiez vos données pour obtenir un résultat :</p>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5">
+                {besoins.erreurs.map((e) => (
+                  <li key={e}>{e}</li>
+                ))}
+              </ul>
             </div>
           )}
+
           <p className="mt-3 text-xs text-muted-foreground">
             Formule de Mifflin-St Jeor. Un déficit correspond à environ −20 % de la dépense totale, un
             surplus à +15 %.
