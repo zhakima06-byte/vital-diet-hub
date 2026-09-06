@@ -3,6 +3,13 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { foods, kcalPer100g } from "@/data/foods";
+import {
+  calculateNutritionNeeds,
+  type ActiviteKey,
+  type ObjectifKey,
+  type ProfilNutritionnel,
+} from "@/lib/nutrition";
+
 
 export const Route = createFileRoute("/calculateurs/calories")({
   head: () => ({
@@ -97,7 +104,7 @@ function CaloriesPage() {
     );
   }, [lignes]);
 
-  const cible = besoins?.cible ?? 0;
+  const cible = besoins.valide ? besoins.caloriesCibles : 0;
   const pct = cible ? Math.min(100, Math.round((totaux.kcal / cible) * 100)) : 0;
   const macroKcal = totaux.prot * 4 + totaux.gluc * 4 + totaux.lip * 9 || 1;
   const parts = {
@@ -177,7 +184,20 @@ function CaloriesPage() {
                 ))}
               </select>
             </label>
+            <label className="block text-sm sm:col-span-2">
+              Contexte de santé (adapte l'apport protéique)
+              <select
+                value={profilClinique}
+                onChange={(e) => setProfilClinique(e.target.value as ProfilNutritionnel)}
+                className={field}
+              >
+                {profils.map((p) => (
+                  <option key={p.key} value={p.key}>{p.label}</option>
+                ))}
+              </select>
+            </label>
           </div>
+
 
           {besoins.valide ? (
             <>
