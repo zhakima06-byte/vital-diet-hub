@@ -88,23 +88,29 @@ function Index() {
 
     const imc = p / (t * t);
     const cat = categories.find((c) => imc < c.max)!;
-    const mb =
-      10 * p + 6.25 * Number(taille) - 5 * a + (sexe === "homme" ? 5 : -161);
-    const factor = activites.find((x) => x.key === activite)!.factor;
-    const delta = objectifs.find((x) => x.key === objectif)!.delta;
-    const calories = Math.round(mb * factor + delta);
+    const besoins = calculateNutritionNeeds({
+      sexe,
+      age: a,
+      poids: p,
+      taille: Number(taille),
+      activite,
+      objectif,
+    });
+    if (!besoins.valide) return { imc, cat, calories: 0, besoins, macros: { proteines: 0, glucides: 0, lipides: 0 } };
 
     return {
       imc,
       cat,
-      calories,
+      calories: besoins.caloriesCibles,
+      besoins,
       macros: {
-        proteines: Math.round((calories * 0.2) / 4),
-        glucides: Math.round((calories * 0.45) / 4),
-        lipides: Math.round((calories * 0.35) / 9),
+        proteines: besoins.macros.proteines.grammes,
+        glucides: besoins.macros.glucides.grammes,
+        lipides: besoins.macros.lipides.grammes,
       },
     };
   }, [poids, taille, age, sexe, activite, objectif]);
+
 
   const gaugePct = result ? Math.min(100, Math.max(2, ((result.imc - 14) / 28) * 100)) : 0;
   const sheet = diseases.find((d) => d.slug === pathologie);
