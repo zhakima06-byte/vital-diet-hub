@@ -23,17 +23,26 @@ export const Route = createFileRoute("/calculateurs/calories")({
 });
 
 const activites = [
-  { key: "sedentaire", label: "Sédentaire", factor: 1.2 },
-  { key: "leger", label: "Léger (1-3 j/sem.)", factor: 1.375 },
-  { key: "modere", label: "Modéré (3-5 j/sem.)", factor: 1.55 },
-  { key: "actif", label: "Actif (6-7 j/sem.)", factor: 1.725 },
-  { key: "tres-actif", label: "Très actif", factor: 1.9 },
+  { key: "sedentaire", label: "Sédentaire" },
+  { key: "leger", label: "Léger (1-3 j/sem.)" },
+  { key: "modere", label: "Modéré (3-5 j/sem.)" },
+  { key: "actif", label: "Actif (6-7 j/sem.)" },
+  { key: "tres-actif", label: "Très actif" },
 ] as const;
 
 const objectifs = [
-  { key: "perte", label: "Perte de poids", delta: -0.2 },
-  { key: "maintien", label: "Maintien", delta: 0 },
-  { key: "prise", label: "Prise de poids", delta: 0.15 },
+  { key: "perte", label: "Perte de poids" },
+  { key: "maintien", label: "Maintien" },
+  { key: "prise", label: "Prise de poids" },
+] as const;
+
+const profils = [
+  { key: "adulte", label: "Adulte général" },
+  { key: "sportif", label: "Sportif" },
+  { key: "diabete", label: "Diabète" },
+  { key: "hypertension", label: "Hypertension" },
+  { key: "goutte", label: "Goutte / hyperuricémie" },
+  { key: "renale", label: "Maladie rénale chronique" },
 ] as const;
 
 const field = "mt-1 w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring";
@@ -48,17 +57,24 @@ function CaloriesPage() {
   const [sexe, setSexe] = useState<"H" | "F">("F");
   const [poids, setPoids] = useState("65");
   const [taille, setTaille] = useState("168");
-  const [activite, setActivite] = useState<(typeof activites)[number]["key"]>("modere");
-  const [objectif, setObjectif] = useState<(typeof objectifs)[number]["key"]>("maintien");
+  const [activite, setActivite] = useState<ActiviteKey>("modere");
+  const [objectif, setObjectif] = useState<ObjectifKey>("maintien");
+  const [profilClinique, setProfilClinique] = useState<ProfilNutritionnel>("adulte");
 
-  const besoins = useMemo(() => {
-    const a = Number(age), p = Number(poids), t = Number(taille);
-    if (!a || !p || !t) return null;
-    const mb = 10 * p + 6.25 * t - 5 * a + (sexe === "H" ? 5 : -161);
-    const det = mb * activites.find((x) => x.key === activite)!.factor;
-    const cible = det * (1 + objectifs.find((x) => x.key === objectif)!.delta);
-    return { mb: Math.round(mb), det: Math.round(det), cible: Math.round(cible) };
-  }, [age, poids, taille, sexe, activite, objectif]);
+  const besoins = useMemo(
+    () =>
+      calculateNutritionNeeds({
+        sexe: sexe === "H" ? "homme" : "femme",
+        age: Number(age),
+        poids: Number(poids.replace(",", ".")),
+        taille: Number(taille.replace(",", ".")),
+        activite,
+        objectif,
+        profil: profilClinique,
+      }),
+    [age, poids, taille, sexe, activite, objectif, profilClinique],
+  );
+
 
   // Repas
   const [lignes, setLignes] = useState<Ligne[]>([]);
