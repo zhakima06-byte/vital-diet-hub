@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { calculateNutritionNeeds } from "@/lib/nutrition";
+
 
 export type Sexe = "femme" | "homme";
 export type Activite = "sedentaire" | "leger" | "modere" | "intense";
@@ -53,24 +55,29 @@ export function objectifFromStatut(statut: Statut): Objectif {
   return "perte";
 }
 
-/** Métabolisme de base (Mifflin-St Jeor) puis besoins journaliers ajustés. */
+/** Besoins journaliers : délègue au moteur central de calcul nutritionnel. */
 export function besoins(p: Profil) {
-  const mb = 10 * p.poids + 6.25 * p.taille - 5 * p.age + (p.sexe === "homme" ? 5 : -161);
-  const factor = activites.find((a) => a.key === p.activite)!.factor;
-  const delta = objectifs.find((o) => o.key === p.objectif)!.delta;
-  const maintien = Math.round(mb * factor);
-  const cible = Math.max(1200, Math.round(mb * factor + delta));
+  const r = calculateNutritionNeeds({
+    sexe: p.sexe,
+    age: p.age,
+    poids: p.poids,
+    taille: p.taille,
+    activite: p.activite,
+    objectif: p.objectif,
+  });
   return {
-    mb: Math.round(mb),
-    maintien,
-    cible,
+    mb: r.bmr,
+    maintien: r.tdee,
+    cible: r.caloriesCibles,
     macros: {
-      proteines: Math.round((cible * 0.2) / 4),
-      glucides: Math.round((cible * 0.45) / 4),
-      lipides: Math.round((cible * 0.35) / 9),
+      proteines: r.macros.proteines.grammes,
+      glucides: r.macros.glucides.grammes,
+      lipides: r.macros.lipides.grammes,
     },
+    detail: r,
   };
 }
+
 
 export function readProfil(): Profil | null {
   if (typeof window === "undefined") return null;
