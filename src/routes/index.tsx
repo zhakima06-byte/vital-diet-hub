@@ -14,6 +14,8 @@ import {
   type Objectif as ObjectifProfil,
   type Sexe as SexeProfil,
 } from "@/lib/profil";
+import { calculateNutritionNeeds } from "@/lib/nutrition";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
