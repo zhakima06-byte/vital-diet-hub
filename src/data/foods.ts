@@ -127,7 +127,24 @@ export const foods: FoodItem[] = [
   f("cacahuete", "Cacahuètes", "Oléagineux", [380, 26, 12, 49, 55, 700, 6, 5, 3]),
   f("parmesan", "Parmesan", "Produits laitiers", [700, 36, 0.5, 29, 1180, 100, 1500, 20, 3.5]),
   f("champignon", "Champignons de Paris", "Légumes", [86, 3, 1, 0.3, 6, 320, 6, 10, 0.5]),
+  f("couscous", "Couscous / semoule cuite", "Féculents", [22, 3.8, 23, 0.2, 8, 58, 5, 2, 0.3]),
+  f("avocat", "Avocat", "Fruits", [52, 2, 2, 15, 12, 485, 7, 20, 0.6]),
+  f("courgette", "Courgette cuite", "Légumes", [35, 1.2, 2, 0.3, 18, 260, 3, 20, 0.3]),
+  f("haricots-verts", "Haricots verts cuits", "Légumes", [30, 1.9, 4, 0.3, 40, 150, 2, 20, 0.25]),
+  f("salade-verte", "Salade verte", "Légumes", [30, 1.3, 1.5, 0.2, 35, 250, 10, 10, 0.3]),
+  f("dattes", "Dattes", "Fruits secs", [62, 2.5, 65, 0.4, 64, 656, 2, 100, 0.3]),
+  f("poisson-blanc", "Poisson blanc cuit (merlan)", "Poissons", [220, 20, 0, 1, 30, 350, 90, 2, 0.5]),
 ];
+
+/** Fibres indicatives (g/100 g) — disponibles pour une partie des aliments seulement. */
+export const fibresPer100g: Record<string, number> = {
+  banane: 2.6, orange: 2.2, pomme: 2.4, fraise: 2, epinard: 2.4, brocoli: 3.3, carotte: 2.8,
+  "pomme-de-terre": 1.8, tomate: 1.2, lentilles: 7.9, "pois-chiches": 7.6, "haricot-rouge": 6.4,
+  "riz-blanc": 0.4, pates: 1.8, "pain-complet": 7, "pain-blanc": 2.7, "flocons-avoine": 10,
+  amande: 12.5, noix: 6.7, quinoa: 2.8, couscous: 1.4, avocat: 6.7, courgette: 1,
+  "haricots-verts": 3.2, dattes: 8, "salade-verte": 1.3, "abricot-sec": 7, champignon: 1,
+  "chocolat-noir": 11, cacahuete: 8.5, "graines-courge": 6, sesame: 12, "noix-cajou": 3,
+};
 
 export const getFood = (id: string) => foods.find((x) => x.id === id);
 /** Estimation énergétique à partir des macronutriments (Atwater), pour 100 g. */
