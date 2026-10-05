@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame, Sparkles } from "lucide-react";
+import { Home, Salad, Stethoscope, Apple, Leaf, Calculator, FileDown, Flame, Sparkles, Utensils } from "lucide-react";
 
 const nav = [
   { to: "/", label: "Accueil", icon: Home },
   { to: "/regimes", label: "Régimes", icon: Salad },
   { to: "/fiches-regimes", label: "Fiches", icon: FileDown },
   { to: "/compteur", label: "Compteur", icon: Flame },
+  { to: "/menus", label: "Menus", icon: Utensils },
   { to: "/maladies", label: "Pathologies", icon: Stethoscope },
   { to: "/calculateurs", label: "Calculs", icon: Calculator },
   { to: "/aliments", label: "Aliments", icon: Apple },
