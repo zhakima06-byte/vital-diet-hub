@@ -214,7 +214,7 @@ export function ajusterPortions(items: MenuItem[], cible: Cible): MenuItem[] {
   });
   const LAMBDA = 0.02;
   const tot = () =>
-    [0, 1, 2].map((k) => out.reduce((s, it, i) => s + A[i][k] * it.grammes, 0));
+    [0, 1, 2].map((k) => out.reduce((s, it, i) => s + A[i]![k]! * it.grammes, 0));
 
   for (let iter = 0; iter < 80; iter++) {
     out.forEach((it, i) => {
@@ -224,9 +224,9 @@ export function ajusterPortions(items: MenuItem[], cible: Cible): MenuItem[] {
       let num = LAMBDA / s;
       let den = LAMBDA / (s * s);
       for (let k = 0; k < 3; k++) {
-        const r = cur[k] - T[k];
-        num += (W[k] * A[i][k] * (A[i][k] * it.grammes - r)) / (T[k] * T[k]);
-        den += (W[k] * A[i][k] * A[i][k]) / (T[k] * T[k]);
+        const r = cur[k]! - T[k]!;
+        num += (W[k]! * A[i]![k]! * (A[i]![k]! * it.grammes - r)) / (T[k]! * T[k]!);
+        den += (W[k]! * A[i]![k]! * A[i]![k]!) / (T[k]! * T[k]!);
       }
       it.grammes = Math.min(it.max, Math.max(it.min, num / den));
     });
