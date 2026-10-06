@@ -284,7 +284,7 @@ export function genererJour(dayIndex: number, r: ReglagesMenu): DayMenu {
   const excl = exclusions(r.prefs, r.profil);
   const meals: Meal[] = mealOrder.map((key, mi) => {
     const tpls = TEMPLATES[key];
-    const tpl = tpls[(dayIndex + mi * 2) % tpls.length];
+    const tpl = tpls[(dayIndex + mi * 2) % tpls.length]!;
     const used = new Set<string>();
     const items: MenuItem[] = [];
     tpl.items.forEach(([foodId, role]) => {
@@ -299,7 +299,7 @@ export function genererJour(dayIndex: number, r: ReglagesMenu): DayMenu {
     });
     return { key, titre: tpl.titre, items: ajusterPortions(items, cibleRepas(r.besoins, r.shares, key)) };
   });
-  return { jour: JOURS[dayIndex % 7], meals };
+  return { jour: JOURS[dayIndex % 7]!, meals };
 }
 
 /** Correction automatique d'une journée modifiée : réajuste chaque repas vers sa cible. */
