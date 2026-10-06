@@ -15,14 +15,14 @@ import { fibresPer100g, foods, type FoodItem } from "@/data/foods";
 export type SourceId = "locale" | "usda" | "openfoodfacts" | "edamam" | "nutritionix";
 
 export type Per100g = {
-  kcal?: number;
-  proteines?: number;
-  glucides?: number;
-  lipides?: number;
-  fibres?: number;
-  sodium?: number;
-  potassium?: number;
-  phosphore?: number;
+  kcal?: number | undefined;
+  proteines?: number | undefined;
+  glucides?: number | undefined;
+  lipides?: number | undefined;
+  fibres?: number | undefined;
+  sodium?: number | undefined;
+  potassium?: number | undefined;
+  phosphore?: number | undefined;
 };
 
 export type NutritionRecord = {
@@ -30,7 +30,7 @@ export type NutritionRecord = {
   nom: string;
   source: SourceId;
   per100g: Per100g;
-  barcode?: string;
+  barcode?: string | undefined;
 };
 
 export const SOURCE_PRIORITY: Record<SourceId, number> = {
@@ -58,7 +58,7 @@ export function mergeRecords(records: NutritionRecord[]): NutritionRecord | null
     const hit = sorted.find((r) => typeof r.per100g[k] === "number");
     if (hit) per100g[k] = hit.per100g[k];
   });
-  return { ...sorted[0], per100g };
+  return { ...sorted[0]!, per100g };
 }
 
 /** Adaptateur base locale. */
