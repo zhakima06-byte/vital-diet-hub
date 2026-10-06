@@ -365,6 +365,12 @@ function Index() {
               </span>
             </Link>
           </div>
+          <Link
+            to="/menus"
+            className="mt-3 block rounded-2xl border border-primary/40 bg-primary/10 p-4 text-sm font-semibold"
+          >
+            🍽️ Générer mon menu personnalisé (quantités en grammes) →
+          </Link>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {fichesRegimes.map((f) => {
