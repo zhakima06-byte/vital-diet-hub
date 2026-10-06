@@ -32,7 +32,7 @@ export const Route = createFileRoute("/maladies/$slug")({
   component: FichePage,
   errorComponent: ({ error }) => (
     <AppShell>
-      <p role="alert">{error.message}</p>
+      <p role="alert">{(error as Error).message}</p>
     </AppShell>
   ),
   notFoundComponent: () => (

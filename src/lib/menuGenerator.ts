@@ -214,7 +214,7 @@ export function ajusterPortions(items: MenuItem[], cible: Cible): MenuItem[] {
   });
   const LAMBDA = 0.02;
   const tot = () =>
-    [0, 1, 2].map((k) => out.reduce((s, it, i) => s + A[i][k] * it.grammes, 0));
+    [0, 1, 2].map((k) => out.reduce((s, it, i) => s + A[i]![k]! * it.grammes, 0));
 
   for (let iter = 0; iter < 80; iter++) {
     out.forEach((it, i) => {
@@ -224,9 +224,9 @@ export function ajusterPortions(items: MenuItem[], cible: Cible): MenuItem[] {
       let num = LAMBDA / s;
       let den = LAMBDA / (s * s);
       for (let k = 0; k < 3; k++) {
-        const r = cur[k] - T[k];
-        num += (W[k] * A[i][k] * (A[i][k] * it.grammes - r)) / (T[k] * T[k]);
-        den += (W[k] * A[i][k] * A[i][k]) / (T[k] * T[k]);
+        const r = cur[k]! - T[k]!;
+        num += (W[k]! * A[i]![k]! * (A[i]![k]! * it.grammes - r)) / (T[k]! * T[k]!);
+        den += (W[k]! * A[i]![k]! * A[i]![k]!) / (T[k]! * T[k]!);
       }
       it.grammes = Math.min(it.max, Math.max(it.min, num / den));
     });
@@ -284,7 +284,7 @@ export function genererJour(dayIndex: number, r: ReglagesMenu): DayMenu {
   const excl = exclusions(r.prefs, r.profil);
   const meals: Meal[] = mealOrder.map((key, mi) => {
     const tpls = TEMPLATES[key];
-    const tpl = tpls[(dayIndex + mi * 2) % tpls.length];
+    const tpl = tpls[(dayIndex + mi * 2) % tpls.length]!;
     const used = new Set<string>();
     const items: MenuItem[] = [];
     tpl.items.forEach(([foodId, role]) => {
@@ -299,7 +299,7 @@ export function genererJour(dayIndex: number, r: ReglagesMenu): DayMenu {
     });
     return { key, titre: tpl.titre, items: ajusterPortions(items, cibleRepas(r.besoins, r.shares, key)) };
   });
-  return { jour: JOURS[dayIndex % 7], meals };
+  return { jour: JOURS[dayIndex % 7]!, meals };
 }
 
 /** Correction automatique d'une journée modifiée : réajuste chaque repas vers sa cible. */

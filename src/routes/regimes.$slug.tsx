@@ -27,7 +27,7 @@ export const Route = createFileRoute("/regimes/$slug")({
   component: DietPage,
   errorComponent: ({ error }) => (
     <AppShell>
-      <p role="alert">{error.message}</p>
+      <p role="alert">{(error as Error).message}</p>
     </AppShell>
   ),
   notFoundComponent: () => (
