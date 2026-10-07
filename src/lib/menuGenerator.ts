@@ -35,6 +35,7 @@ export type Preferences = {
   sansPoisson: boolean;
   sansLactose: boolean;
   sansGluten: boolean;
+  sansOeufs?: boolean;
 };
 
 export type MenuItem = {
@@ -143,12 +144,12 @@ const CONTEXT_EXCLUSIONS: Partial<Record<ProfilNutritionnel, string[]>> = {
 
 /** Substituts par rôle, dans l'ordre de préférence. */
 const SUBSTITUTS: Record<Role, string[]> = {
-  proteine: ["poulet", "poisson-blanc", "oeuf", "lentilles", "pois-chiches", "tofu", "dinde"],
+  proteine: ["poulet", "poisson-blanc", "oeuf", "lentilles", "pois-chiches", "tofu", "haricot-rouge", "dinde"],
   glucide: ["riz-blanc", "pomme-de-terre", "quinoa", "couscous", "pain-complet"],
   legume: ["courgette", "haricots-verts", "carotte", "brocoli", "salade-verte", "tomate"],
   fruit: ["pomme", "orange", "fraise", "banane"],
   lipide: ["huile-olive", "amande", "noix"],
-  laitier: ["yaourt-nature", "fromage-blanc", "tofu", "oeuf"],
+  laitier: ["yaourt-nature", "fromage-blanc", "lait-demi-ecreme", "tofu", "oeuf", "amande"],
 };
 
 export function exclusions(prefs: Preferences, profil: ProfilNutritionnel): Set<string> {
@@ -157,6 +158,7 @@ export function exclusions(prefs: Preferences, profil: ProfilNutritionnel): Set<
   if (prefs.sansPoisson) POISSON.forEach((x) => s.add(x));
   if (prefs.sansLactose) LACTOSE.forEach((x) => s.add(x));
   if (prefs.sansGluten) GLUTEN.forEach((x) => s.add(x));
+  if (prefs.sansOeufs) s.add("oeuf");
   (CONTEXT_EXCLUSIONS[profil] ?? []).forEach((x) => s.add(x));
   return s;
 }
@@ -279,11 +281,53 @@ export function cibleRepas(besoins: NutritionResult, shares: Record<MealKey, num
   };
 }
 
+/** Modèles végétariens (aucune viande, poisson ni fruit de mer) — 7 déjeuners, 7 dîners. */
+const VEG_TEMPLATES: Partial<Record<MealKey, Template[]>> = {
+  dejeuner: [
+    { titre: "Couscous aux sept légumes et pois chiches", items: [["couscous", "glucide"], ["pois-chiches", "proteine"], ["courgette", "legume"], ["carotte", "legume"], ["huile-olive", "lipide"], ["yaourt-nature", "laitier"]] },
+    { titre: "Lentilles mijotées, riz et salade", items: [["lentilles", "proteine"], ["riz-blanc", "glucide"], ["salade-verte", "legume"], ["huile-olive", "lipide"], ["orange", "fruit"]] },
+    { titre: "Loubia (haricots rouges), pain complet", items: [["haricot-rouge", "proteine"], ["pain-complet", "glucide"], ["tomate", "legume"], ["huile-olive", "lipide"], ["pomme", "fruit"]] },
+    { titre: "Tofu sauté, quinoa et brocoli", items: [["tofu", "proteine"], ["quinoa", "glucide"], ["brocoli", "legume"], ["huile-olive", "lipide"], ["fraise", "fruit"]] },
+    { titre: "Pâtes aux pois chiches et épinards", items: [["pates", "glucide"], ["pois-chiches", "proteine"], ["epinard", "legume"], ["huile-olive", "lipide"], ["parmesan", "laitier"]] },
+    { titre: "Tajine de pommes de terre aux œufs", items: [["pomme-de-terre", "glucide"], ["oeuf", "proteine"], ["haricots-verts", "legume"], ["huile-olive", "lipide"], ["banane", "fruit"]] },
+    { titre: "Semoule, lentilles et légumes rôtis", items: [["couscous", "glucide"], ["lentilles", "proteine"], ["courgette", "legume"], ["huile-olive", "lipide"], ["fromage-blanc", "laitier"]] },
+  ],
+  diner: [
+    { titre: "Chorba de lentilles et pain", items: [["lentilles", "proteine"], ["tomate", "legume"], ["carotte", "legume"], ["huile-olive", "lipide"], ["pain-complet", "glucide"]] },
+    { titre: "Omelette aux courgettes et pommes de terre", items: [["oeuf", "proteine"], ["pomme-de-terre", "glucide"], ["courgette", "legume"], ["huile-olive", "lipide"]] },
+    { titre: "Houmous, crudités et pain", items: [["pois-chiches", "proteine"], ["carotte", "legume"], ["tomate", "legume"], ["huile-olive", "lipide"], ["pain-blanc", "glucide"]] },
+    { titre: "Riz aux haricots rouges et salade", items: [["haricot-rouge", "proteine"], ["riz-blanc", "glucide"], ["salade-verte", "legume"], ["avocat", "lipide"]] },
+    { titre: "Gratin de légumes, fromage et quinoa", items: [["emmental", "laitier"], ["quinoa", "glucide"], ["brocoli", "legume"], ["huile-olive", "lipide"], ["yaourt-nature", "laitier"]] },
+    { titre: "Tofu, semoule et haricots verts", items: [["tofu", "proteine"], ["couscous", "glucide"], ["haricots-verts", "legume"], ["huile-olive", "lipide"]] },
+    { titre: "Soupe de pois chiches et champignons", items: [["pois-chiches", "proteine"], ["champignon", "legume"], ["pain-complet", "glucide"], ["huile-olive", "lipide"], ["fromage-blanc", "laitier"]] },
+  ],
+};
+
+/** Remplace un aliment par une alternative du même rôle (compatible avec les exclusions) et réajuste le repas. */
+export function remplacerAliment(d: DayMenu, meal: MealKey, uid: string, r: ReglagesMenu): DayMenu {
+  const excl = exclusions(r.prefs, r.profil);
+  return {
+    ...d,
+    meals: d.meals.map((m) => {
+      if (m.key !== meal) return m;
+      const it = m.items.find((x) => x.uid === uid);
+      if (!it) return m;
+      const used = new Set(m.items.map((x) => x.foodId));
+      const pool = SUBSTITUTS[it.role];
+      const start = Math.max(0, pool.indexOf(it.foodId));
+      const alt = [...pool.slice(start + 1), ...pool.slice(0, start)].find((x) => !excl.has(x) && !used.has(x) && getFood(x));
+      if (!alt) return m;
+      const items = m.items.map((x) => (x.uid === uid ? makeItem(alt, it.role) : x));
+      return { ...m, items: ajusterPortions(items, cibleRepas(r.besoins, r.shares, meal)) };
+    }),
+  };
+}
+
 /** Génère une journée (rotation selon l'index du jour pour varier les aliments). */
 export function genererJour(dayIndex: number, r: ReglagesMenu): DayMenu {
   const excl = exclusions(r.prefs, r.profil);
   const meals: Meal[] = mealOrder.map((key, mi) => {
-    const tpls = TEMPLATES[key];
+    const tpls = r.prefs.vegetarien ? VEG_TEMPLATES[key] ?? TEMPLATES[key] : TEMPLATES[key];
     const tpl = tpls[(dayIndex + mi * 2) % tpls.length]!;
     const used = new Set<string>();
     const items: MenuItem[] = [];

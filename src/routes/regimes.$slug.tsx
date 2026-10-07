@@ -134,6 +134,11 @@ function DietPage() {
         </div>
       ) : null}
 
+      {diet.slug === "vegetarien" && (
+        <Link to="/menus" search={{ regime: "vegetarien" }} className="card-soft mt-6 block p-4 font-semibold text-tone-green">
+          🌱 Générer mon programme végétarien personnalisé sur 7 jours →
+        </Link>
+      )}
       {diet.evaluation?.length ? <DietSelfCheck dietName={diet.name} questions={diet.evaluation} /> : null}
 
       <div className="mt-6">

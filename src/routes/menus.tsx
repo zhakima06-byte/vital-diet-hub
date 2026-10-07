@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Lock, Plus, RefreshCw, Trash2, Unlock, Wand2 } from "lucide-react";
+import { ArrowLeftRight, Lock, Plus, RefreshCw, Trash2, Unlock, Wand2 } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { foods, getFood } from "@/data/foods";
 import { calculateNutritionNeeds, activiteLabels, type ProfilNutritionnel } from "@/lib/nutrition";
@@ -19,6 +19,7 @@ import {
   somme,
   statutObjectif,
   totalJour,
+  remplacerAliment,
   exclusions,
   type DayMenu,
   type MealKey,
@@ -44,8 +45,18 @@ export const Route = createFileRoute("/menus")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { regime?: string } =>
+    typeof s['regime'] === "string" ? { regime: s['regime'] } : {},
   component: MenusPage,
 });
+
+type ProfilVeg = "lacto-ovo" | "lacto" | "ovo" | "vegetalien";
+const profilsVeg: { key: ProfilVeg; label: string }[] = [
+  { key: "lacto-ovo", label: "Lacto-ovo (œufs + laitages)" },
+  { key: "lacto", label: "Lacto (laitages, sans œufs)" },
+  { key: "ovo", label: "Ovo (œufs, sans laitages)" },
+  { key: "vegetalien", label: "Végétalien (100 % végétal)" },
+];
 
 type ObjectifMenu = Objectif | "reequilibrage";
 const objectifsMenu: { key: ObjectifMenu; label: string; aide: string }[] = [
@@ -70,13 +81,17 @@ const field =
 
 function MenusPage() {
   const { profil, pret } = useProfil();
+  const search = Route.useSearch();
   const [objectif, setObjectif] = useState<ObjectifMenu>("maintien");
   const [contexte, setContexte] = useState<ProfilNutritionnel>("adulte");
   const [shares, setShares] = useState<Record<MealKey, number>>(DEFAULT_SHARES);
-  const [prefs, setPrefs] = useState<Preferences>({ vegetarien: false, sansPoisson: false, sansLactose: false, sansGluten: false });
+  const [prefs, setPrefs] = useState<Preferences>({ vegetarien: search.regime === "vegetarien", sansPoisson: false, sansLactose: false, sansGluten: false });
   const [dayIndex, setDayIndex] = useState(() => (new Date().getDay() + 6) % 7);
   const [menu, setMenu] = useState<DayMenu | null>(null);
   const [messages, setMessages] = useState<string[]>([]);
+  const profilVeg: ProfilVeg = prefs.sansLactose && prefs.sansOeufs ? "vegetalien" : prefs.sansOeufs ? "lacto" : prefs.sansLactose ? "ovo" : "lacto-ovo";
+  const setProfilVeg = (v: ProfilVeg) =>
+    setPrefs((p) => ({ ...p, vegetarien: true, sansOeufs: v === "lacto" || v === "vegetalien", sansLactose: v === "ovo" || v === "vegetalien" }));
   const [ajout, setAjout] = useState<{ meal: MealKey; q: string } | null>(null);
 
   useEffect(() => {
@@ -156,6 +171,8 @@ function MenusPage() {
     setMenu((d) => d && { ...d, meals: d.meals.map((ml) => (ml.key !== meal ? ml : { ...ml, items: [...ml.items, makeItem(foodId, roleFromFood(f), 100)] })) });
     setAjout(null);
   };
+  const remplacer = (meal: MealKey, uid: string) => reglages && setMenu((d) => d && remplacerAliment(d, meal, uid, reglages));
+  const semaine = reglages ? JOURS.map((_, i) => (i === dayIndex && menu ? menu : genererJour(i, reglages))) : [];
   const corriger = () => {
     if (!menu || !reglages) return;
     const res = corrigerJour(menu, reglages);
@@ -169,7 +186,8 @@ function MenusPage() {
   return (
     <AppShell>
       <header>
-        <h1 className="text-2xl font-semibold">Mon menu personnalisé</h1>
+        <h1 className="text-2xl font-semibold">{prefs.vegetarien ? "🌱 Régime végétarien" : "Mon menu personnalisé"}</h1>
+        {prefs.vegetarien && <p className="mt-1 font-medium text-tone-green">Objectif : {besoins.caloriesCibles} kcal/jour — programme de 7 jours</p>}
         <p className="mt-1 text-sm text-muted-foreground">
           Calories → macronutriments → aliments et quantités → répartition sur la journée.
         </p>
@@ -236,6 +254,15 @@ function MenusPage() {
           </div>
         </div>
 
+        {prefs.vegetarien && (
+          <label className="mt-4 block text-sm font-medium">
+            Profil végétarien
+            <select className={`${field} mt-2`} value={profilVeg} onChange={(e) => setProfilVeg(e.target.value as ProfilVeg)}>
+              {profilsVeg.map((v) => <option key={v.key} value={v.key}>{v.label}</option>)}
+            </select>
+          </label>
+        )}
+
         <details className="mt-4">
           <summary className="cursor-pointer text-sm font-medium">Répartition des calories entre les repas</summary>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -271,14 +298,14 @@ function MenusPage() {
           <div className="mt-6 flex gap-2 overflow-x-auto pb-1">
             {JOURS.map((j, i) => (
               <button key={j} onClick={() => setDayIndex(i)} className={`shrink-0 rounded-full px-3 py-1.5 text-sm ${i === dayIndex ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                {j}
+                {prefs.vegetarien ? `Jour ${i + 1}` : j}
               </button>
             ))}
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <h2 className="font-display text-xl font-semibold">
-              MON MENU — {besoins.caloriesCibles} kcal <span className="text-sm font-normal text-muted-foreground">({menu.jour})</span>
+              {prefs.vegetarien ? `Jour ${dayIndex + 1} — Menu végétarien` : `MON MENU — ${besoins.caloriesCibles} kcal`} <span className="text-sm font-normal text-muted-foreground">({menu.jour})</span>
             </h2>
             <div className="flex gap-2">
               <button onClick={corriger} className="inline-flex items-center gap-1.5 rounded-xl bg-tone-green px-3 py-2 text-sm font-medium text-primary-foreground">
@@ -318,6 +345,7 @@ function MenusPage() {
                           <input type="number" min={0} value={it.grammes} onChange={(e) => setItem(meal.key, it.uid, { grammes: Math.max(0, Number(e.target.value) || 0) })} className="w-20 rounded-lg border border-input bg-background px-2 py-1 text-right" aria-label={`Quantité ${f?.name}`} />
                           <span className="w-4 text-xs text-muted-foreground">g</span>
                           <span className="hidden w-16 text-right text-xs text-muted-foreground sm:inline">{r0(ti.kcal)} kcal</span>
+                          <button onClick={() => remplacer(meal.key, it.uid)} title="Remplacer cet aliment" aria-label="Remplacer cet aliment" className="text-muted-foreground hover:text-primary"><ArrowLeftRight className="size-4" /></button>
                           <button onClick={() => setItem(meal.key, it.uid, { verrouille: !it.verrouille })} title={it.verrouille ? "Quantité verrouillée" : "Verrouiller la quantité"} className="text-muted-foreground">
                             {it.verrouille ? <Lock className="size-4 text-primary" /> : <Unlock className="size-4" />}
                           </button>
@@ -383,6 +411,31 @@ function MenusPage() {
                 Repères indicatifs : sodium ≈ {r0(total.sodium)} mg · potassium ≈ {r0(total.potassium)} mg · phosphore ≈ {r0(total.phosphore)} mg (hors sel ajouté).
               </p>
             )}
+          </section>
+
+          <section className="card-soft mt-5 overflow-x-auto p-5">
+            <h3 className="font-semibold">Vue de la semaine</h3>
+            <table className="mt-3 w-full text-sm">
+              <thead className="text-left text-xs text-muted-foreground">
+                <tr><th className="py-1">Jour</th><th>Déjeuner</th><th>Dîner</th><th className="text-right">kcal</th><th className="text-right">P</th><th className="text-right">G</th><th className="text-right">L</th></tr>
+              </thead>
+              <tbody>
+                {semaine.map((d, i) => {
+                  const t = totalJour(d);
+                  return (
+                    <tr key={i} onClick={() => setDayIndex(i)} className={`cursor-pointer border-t border-border/60 ${i === dayIndex ? "bg-primary/5 font-medium" : ""}`}>
+                      <td className="py-1.5">{prefs.vegetarien ? `Jour ${i + 1}` : d.jour}</td>
+                      <td className="text-xs">{d.meals[1]?.titre}</td>
+                      <td className="text-xs">{d.meals[3]?.titre}</td>
+                      <td className="text-right">{r0(t.kcal)}</td>
+                      <td className="text-right">{r0(t.proteines)}</td>
+                      <td className="text-right">{r0(t.glucides)}</td>
+                      <td className="text-right">{r0(t.lipides)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </section>
         </>
       )}
