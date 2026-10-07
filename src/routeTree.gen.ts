@@ -26,6 +26,7 @@ import { Route as FichesRegimesSlugRouteImport } from './routes/fiches-regimes.$
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
 import { Route as NutrimentsZincRouteImport } from './routes/nutriments.zinc'
+import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -113,6 +114,11 @@ const NutrimentsZincRoute = NutrimentsZincRouteImport.update({
   path: '/nutriments/zinc',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegimesIndexRoute = RegimesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RegimesRoute,
+} as any)
 const RegimesSlugRoute = RegimesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -138,13 +144,13 @@ export interface FileRoutesByFullPath {
   '/calculateurs/': typeof CalculateursIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
+  '/regimes/': typeof RegimesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aliments': typeof AlimentsRouteWithChildren
   '/compteur': typeof CompteurRoute
   '/menus': typeof MenusRoute
-  '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
@@ -155,6 +161,7 @@ export interface FileRoutesByTo {
   '/calculateurs': typeof CalculateursIndexRoute
   '/fiches-regimes': typeof FichesRegimesIndexRoute
   '/maladies': typeof MaladiesIndexRoute
+  '/regimes': typeof RegimesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -176,6 +183,7 @@ export interface FileRoutesById {
   '/calculateurs/': typeof CalculateursIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
+  '/regimes/': typeof RegimesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -198,13 +206,13 @@ export interface FileRouteTypes {
     | '/calculateurs/'
     | '/fiches-regimes/'
     | '/maladies/'
+    | '/regimes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/aliments'
     | '/compteur'
     | '/menus'
-    | '/regimes'
     | '/aliments/$id'
     | '/calculateurs/calories'
     | '/calculateurs/dfg'
@@ -215,6 +223,7 @@ export interface FileRouteTypes {
     | '/calculateurs'
     | '/fiches-regimes'
     | '/maladies'
+    | '/regimes'
   id:
     | '__root__'
     | '/'
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/calculateurs/'
     | '/fiches-regimes/'
     | '/maladies/'
+    | '/regimes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -370,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NutrimentsZincRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regimes/': {
+      id: '/regimes/'
+      path: '/'
+      fullPath: '/regimes/'
+      preLoaderRoute: typeof RegimesIndexRouteImport
+      parentRoute: typeof RegimesRoute
+    }
     '/regimes/$slug': {
       id: '/regimes/$slug'
       path: '/$slug'
@@ -438,10 +455,12 @@ const MaladiesRouteWithChildren = MaladiesRoute._addFileChildren(
 
 interface RegimesRouteChildren {
   RegimesSlugRoute: typeof RegimesSlugRoute
+  RegimesIndexRoute: typeof RegimesIndexRoute
 }
 
 const RegimesRouteChildren: RegimesRouteChildren = {
   RegimesSlugRoute: RegimesSlugRoute,
+  RegimesIndexRoute: RegimesIndexRoute,
 }
 
 const RegimesRouteWithChildren =
