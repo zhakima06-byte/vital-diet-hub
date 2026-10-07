@@ -46,7 +46,7 @@ export const Route = createFileRoute("/menus")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { regime?: string } =>
-    typeof s.regime === "string" ? { regime: s.regime } : {},
+    typeof s['regime'] === "string" ? { regime: s['regime'] } : {},
   component: MenusPage,
 });
 
