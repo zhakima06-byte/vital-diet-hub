@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftRight, Lock, Plus, RefreshCw, Trash2, Unlock, Wand2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeftRight, Download, Leaf, Utensils } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MenuWeekSheet } from "@/components/MenuWeekSheet";
+import { exportElementToPdf } from "@/lib/pdf";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { foods, getFood } from "@/data/foods";
 import { calculateNutritionNeeds, activiteLabels, type ProfilNutritionnel } from "@/lib/nutrition";
@@ -34,7 +37,7 @@ export const Route = createFileRoute("/menus")({
       {
         name: "description",
         content:
-          "Menus d'une journée calculés à partir de vos besoins : calories, protéines, glucides et lipides, avec quantités en grammes et répartition par repas.",
+          "Programmes personnalisés et végétariens sur 7 jours avec quantités, calories et macronutriments, téléchargeables en PDF.",
       },
       { property: "og:title", content: "Menus personnalisés avec quantités — NutriSanté" },
       {
@@ -92,6 +95,9 @@ function MenusPage() {
   const profilVeg: ProfilVeg = prefs.sansLactose && prefs.sansOeufs ? "vegetalien" : prefs.sansOeufs ? "lacto" : prefs.sansLactose ? "ovo" : "lacto-ovo";
   const setProfilVeg = (v: ProfilVeg) =>
     setPrefs((p) => ({ ...p, vegetarien: true, sansOeufs: v === "lacto" || v === "vegetalien", sansLactose: v === "ovo" || v === "vegetalien" }));
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
   const [ajout, setAjout] = useState<{ meal: MealKey; q: string } | null>(null);
 
   useEffect(() => {
@@ -180,104 +186,55 @@ function MenusPage() {
     setMessages(res.messages);
   };
 
+  const telecharger = async () => {
+    if (!sheetRef.current || busy) return;
+    setBusy(true);
+    setDownloadError("");
+    try {
+      await exportElementToPdf(sheetRef.current, prefs.vegetarien ? "menu-vegetarien-7-jours.pdf" : "menu-personnalise-7-jours.pdf");
+    } catch {
+      setDownloadError("Le téléchargement a échoué. Veuillez réessayer.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   // Calories / macros restantes au fil des repas
   let cumul = { kcal: 0, proteines: 0, glucides: 0, lipides: 0 };
 
   return (
     <AppShell>
       <header>
-        <h1 className="text-2xl font-semibold">{prefs.vegetarien ? "🌱 Régime végétarien" : "Mon menu personnalisé"}</h1>
-        {prefs.vegetarien && <p className="mt-1 font-medium text-tone-green">Objectif : {besoins.caloriesCibles} kcal/jour — programme de 7 jours</p>}
-        <p className="mt-1 text-sm text-muted-foreground">
-          Calories → macronutriments → aliments et quantités → répartition sur la journée.
-        </p>
+        <h1 className="text-2xl font-semibold">Menus personnalisés</h1>
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2" role="group" aria-label="Programme alimentaire">
+          <Button variant={!prefs.vegetarien ? "default" : "outline"} className="h-12 whitespace-normal" aria-pressed={!prefs.vegetarien} onClick={() => setPrefs((p) => ({ ...p, vegetarien: false, sansOeufs: false, sansLactose: false }))}>
+            <Utensils /> Menu personnalisé sur 7 jours
+          </Button>
+          <Button variant={prefs.vegetarien ? "default" : "outline"} className="h-12 whitespace-normal" aria-pressed={prefs.vegetarien} onClick={() => setPrefs((p) => ({ ...p, vegetarien: true }))}>
+            <Leaf /> Régime végétarien
+          </Button>
+        </div>
       </header>
-
-      {/* Profil & orientation */}
-      <section className="card-soft mt-5 p-5">
-        <div className="flex flex-wrap gap-2 text-xs">
-          <span className="rounded-full bg-tone-blue-soft px-3 py-1 font-medium text-tone-blue">
-            IMC {profil.imc.toFixed(1)} · {statutLabel[profil.statut]}
-          </span>
-          <span className="rounded-full bg-muted px-3 py-1">{profil.sexe === "femme" ? "Femme" : "Homme"}, {profil.age} ans</span>
-          <span className="rounded-full bg-muted px-3 py-1">{profil.poids} kg · {profil.taille} cm</span>
-          <span className="rounded-full bg-muted px-3 py-1">Activité : {activiteLabels[profil.activite]}</span>
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          L'IMC oriente seulement : vos besoins combinent âge, sexe, poids, taille, activité, objectif et contexte de santé.
-        </p>
-
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <section className="mt-5 border-b border-border pb-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium">Objectif</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {objectifsMenu.map((o) => (
-                <button
-                  key={o.key}
-                  onClick={() => setObjectif(o.key)}
-                  className={`rounded-xl border px-3 py-2 text-left text-sm ${objectif === o.key ? "border-primary bg-primary/10 font-medium" : "border-border"}`}
-                >
-                  {o.label}
-                  <span className="block text-[11px] text-muted-foreground">{o.aide}</span>
-                </button>
-              ))}
-            </div>
+            <h2 className="text-lg font-semibold">{prefs.vegetarien ? "Programme végétarien" : "Mon programme sur 7 jours"}</h2>
+            <p className="mt-1 font-medium text-tone-blue">{besoins.caloriesCibles} kcal / jour · {objectifsMenu.find((o) => o.key === objectif)?.label}</p>
+            <p className="mt-1 text-xs text-muted-foreground">IMC {profil.imc.toFixed(1)} · {statutLabel[profil.statut]} · {profil.poids} kg · {profil.taille} cm · {profil.age} ans</p>
           </div>
-          <div className="space-y-3">
-            <label className="block text-sm font-medium">
-              Contexte de santé
-              <select className={`${field} mt-2`} value={contexte} onChange={(e) => setContexte(e.target.value as ProfilNutritionnel)}>
-                {contextes.map((c) => (
-                  <option key={c.key} value={c.key}>{c.label}</option>
-                ))}
-              </select>
-            </label>
-            <div>
-              <p className="text-sm font-medium">Préférences</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {([
-                  ["vegetarien", "Végétarien"],
-                  ["sansPoisson", "Sans poisson"],
-                  ["sansLactose", "Sans lactose"],
-                  ["sansGluten", "Sans gluten"],
-                ] as [keyof Preferences, string][]).map(([k, l]) => (
-                  <button
-                    key={k}
-                    onClick={() => setPrefs((p) => ({ ...p, [k]: !p[k] }))}
-                    className={`rounded-full border px-3 py-1 text-xs ${prefs[k] ? "border-tone-green bg-tone-green-soft text-tone-green" : "border-border"}`}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          <Button variant="outline" onClick={telecharger} disabled={busy || !menu || !besoins.valide}>
+            <Download /> {busy ? "Génération du PDF…" : "Télécharger les 7 jours"}
+          </Button>
         </div>
-
+        {downloadError && <p role="alert" className="mt-2 text-sm text-destructive">{downloadError}</p>}
         {prefs.vegetarien && (
-          <label className="mt-4 block text-sm font-medium">
+          <label className="mt-4 block max-w-sm text-sm font-medium">
             Profil végétarien
             <select className={`${field} mt-2`} value={profilVeg} onChange={(e) => setProfilVeg(e.target.value as ProfilVeg)}>
               {profilsVeg.map((v) => <option key={v.key} value={v.key}>{v.label}</option>)}
             </select>
           </label>
         )}
-
-        <details className="mt-4">
-          <summary className="cursor-pointer text-sm font-medium">Répartition des calories entre les repas</summary>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            {mealOrder.map((k) => (
-              <label key={k} className="text-sm">
-                {mealMeta[k].emoji} {mealMeta[k].label} : <b>{shares[k]} %</b>
-                <input type="range" min={5} max={50} value={shares[k]} onChange={(e) => setShares((s) => ({ ...s, [k]: Number(e.target.value) }))} className="mt-1 w-full accent-[var(--primary)]" />
-              </label>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            Total : {mealOrder.reduce((s, k) => s + shares[k], 0)} % (les parts sont automatiquement ramenées à 100 %).
-            <button className="ml-2 underline" onClick={() => setShares(DEFAULT_SHARES)}>Réinitialiser</button>
-          </p>
-        </details>
       </section>
 
       {pathologie && (
@@ -295,11 +252,11 @@ function MenusPage() {
       {menu && total && (
         <>
           {/* Jours */}
-          <div className="mt-6 flex gap-2 overflow-x-auto pb-1">
+          <div className="mt-6 grid grid-cols-4 gap-2 sm:grid-cols-7">
             {JOURS.map((j, i) => (
-              <button key={j} onClick={() => setDayIndex(i)} className={`shrink-0 rounded-full px-3 py-1.5 text-sm ${i === dayIndex ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+              <Button key={j} onClick={() => setDayIndex(i)} variant={i === dayIndex ? "default" : "secondary"} aria-pressed={i === dayIndex} className="px-2">
                 {prefs.vegetarien ? `Jour ${i + 1}` : j}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -307,20 +264,7 @@ function MenusPage() {
             <h2 className="font-display text-xl font-semibold">
               {prefs.vegetarien ? `Jour ${dayIndex + 1} — Menu végétarien` : `MON MENU — ${besoins.caloriesCibles} kcal`} <span className="text-sm font-normal text-muted-foreground">({menu.jour})</span>
             </h2>
-            <div className="flex gap-2">
-              <button onClick={corriger} className="inline-flex items-center gap-1.5 rounded-xl bg-tone-green px-3 py-2 text-sm font-medium text-primary-foreground">
-                <Wand2 className="size-4" /> Ajuster automatiquement
-              </button>
-              <button onClick={() => reglages && setMenu(genererJour(dayIndex + 7 * (1 + Math.floor(Math.random() * 3)) + 1, reglages))} className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm">
-                <RefreshCw className="size-4" /> Autre menu
-              </button>
-            </div>
           </div>
-          {messages.length > 0 && (
-            <ul className="mt-3 space-y-1 rounded-xl bg-tone-green-soft p-3 text-sm text-tone-green">
-              {messages.map((x) => <li key={x}>• {x}</li>)}
-            </ul>
-          )}
 
           <div className="mt-4 space-y-4">
             {menu.meals.map((meal) => {
@@ -342,28 +286,13 @@ function MenusPage() {
                       return (
                         <li key={it.uid} className="flex items-center gap-2 py-2 text-sm">
                           <span className="flex-1">{f?.name}{it.foodId === "oeuf" && <span className="text-xs text-muted-foreground"> (≈ {Math.max(1, Math.round(it.grammes / 55))} œuf{it.grammes >= 83 ? "s" : ""})</span>}</span>
-                          <input type="number" min={0} value={it.grammes} onChange={(e) => setItem(meal.key, it.uid, { grammes: Math.max(0, Number(e.target.value) || 0) })} className="w-20 rounded-lg border border-input bg-background px-2 py-1 text-right" aria-label={`Quantité ${f?.name}`} />
-                          <span className="w-4 text-xs text-muted-foreground">g</span>
+                          <span className="shrink-0 font-medium">{it.grammes} g</span>
                           <span className="hidden w-16 text-right text-xs text-muted-foreground sm:inline">{r0(ti.kcal)} kcal</span>
-                          <button onClick={() => remplacer(meal.key, it.uid)} title="Remplacer cet aliment" aria-label="Remplacer cet aliment" className="text-muted-foreground hover:text-primary"><ArrowLeftRight className="size-4" /></button>
-                          <button onClick={() => setItem(meal.key, it.uid, { verrouille: !it.verrouille })} title={it.verrouille ? "Quantité verrouillée" : "Verrouiller la quantité"} className="text-muted-foreground">
-                            {it.verrouille ? <Lock className="size-4 text-primary" /> : <Unlock className="size-4" />}
-                          </button>
-                          <button onClick={() => removeItem(meal.key, it.uid)} aria-label="Supprimer" className="text-muted-foreground hover:text-destructive"><Trash2 className="size-4" /></button>
+                          {prefs.vegetarien && <Button variant="ghost" size="icon" onClick={() => remplacer(meal.key, it.uid)} title="Remplacer cet aliment" aria-label="Remplacer cet aliment"><ArrowLeftRight /></Button>}
                         </li>
                       );
                     })}
                   </ul>
-                  {ajout?.meal === meal.key ? (
-                    <div className="mt-2">
-                      <input autoFocus className={field} placeholder="Rechercher un aliment…" value={ajout.q} onChange={(e) => setAjout({ meal: meal.key, q: e.target.value })} />
-                      {resultats.map((f) => (
-                        <button key={f.id} onClick={() => addItem(meal.key, f.id)} className="block w-full px-2 py-1.5 text-left text-sm hover:bg-muted">{f.name}</button>
-                      ))}
-                    </div>
-                  ) : (
-                    <button onClick={() => setAjout({ meal: meal.key, q: "" })} className="mt-2 inline-flex items-center gap-1 text-xs text-primary"><Plus className="size-3.5" /> Ajouter un aliment</button>
-                  )}
                   <p className="mt-3 rounded-lg bg-muted/60 px-3 py-2 text-xs font-medium">
                     {r0(t.kcal)} kcal | {r0(t.proteines)} g protéines | {r0(t.glucides)} g glucides | {r0(t.lipides)} g lipides
                     {t.fibres > 0 && <> | {r0(t.fibres)} g fibres</>}
@@ -389,7 +318,7 @@ function MenusPage() {
                 const s = statutObjectif(v, c);
                 return (
                   <div key={l}>
-                    <div className="flex justify-between text-sm">
+                    <div className="flex flex-wrap justify-between gap-1 text-sm">
                       <span>{l} : <b>{r0(v)}</b> / {r0(c)} {u}</span>
                       <span className={s === "ok" ? "text-tone-green" : "text-tone-pink"}>
                         {s === "ok" ? "✓ Objectif atteint" : s === "bas" ? "En dessous" : "Au-dessus"}
@@ -413,35 +342,14 @@ function MenusPage() {
             )}
           </section>
 
-          <section className="card-soft mt-5 overflow-x-auto p-5">
-            <h3 className="font-semibold">Vue de la semaine</h3>
-            <table className="mt-3 w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground">
-                <tr><th className="py-1">Jour</th><th>Déjeuner</th><th>Dîner</th><th className="text-right">kcal</th><th className="text-right">P</th><th className="text-right">G</th><th className="text-right">L</th></tr>
-              </thead>
-              <tbody>
-                {semaine.map((d, i) => {
-                  const t = totalJour(d);
-                  return (
-                    <tr key={i} onClick={() => setDayIndex(i)} className={`cursor-pointer border-t border-border/60 ${i === dayIndex ? "bg-primary/5 font-medium" : ""}`}>
-                      <td className="py-1.5">{prefs.vegetarien ? `Jour ${i + 1}` : d.jour}</td>
-                      <td className="text-xs">{d.meals[1]?.titre}</td>
-                      <td className="text-xs">{d.meals[3]?.titre}</td>
-                      <td className="text-right">{r0(t.kcal)}</td>
-                      <td className="text-right">{r0(t.proteines)}</td>
-                      <td className="text-right">{r0(t.glucides)}</td>
-                      <td className="text-right">{r0(t.lipides)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </section>
+          <div className="pointer-events-none fixed left-[-10000px] top-0" aria-hidden="true">
+            <div ref={sheetRef}><MenuWeekSheet days={semaine} vegetarien={prefs.vegetarien} calories={besoins.caloriesCibles} /></div>
+          </div>
         </>
       )}
 
       <p className="mt-4 text-xs text-muted-foreground">
-        Suggestion d'aide nutritionnelle, pas une prescription médicale. Teneurs : ordres de grandeur de la base NutriSanté (type CIQUAL), architecture prête pour Open Food Facts, USDA, Edamam et Nutritionix.
+        Suggestion nutritionnelle, pas une prescription médicale.
       </p>
       <MedicalDisclaimer />
     </AppShell>
