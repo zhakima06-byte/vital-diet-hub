@@ -12,6 +12,8 @@ export const Route = createFileRoute("/regimes/")({
           "Bibliothèque de régimes alimentaires : méditerranéen, cétogène, végétarien, jeûne intermittent, sans gluten, FODMAP.",
       },
       { property: "og:title", content: "Bibliothèque de régimes alimentaires — NutriSanté" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Principe, aliments à privilégier, journée type et précautions pour chaque régime.",

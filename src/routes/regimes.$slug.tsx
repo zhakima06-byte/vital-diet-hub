@@ -21,6 +21,8 @@ export const Route = createFileRoute("/regimes/$slug")({
         { name: "description", content: diet.principe.slice(0, 155) },
         { property: "og:title", content: `${diet.name} — NutriSanté` },
         { property: "og:description", content: diet.tagline },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
