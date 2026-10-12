@@ -26,6 +26,8 @@ export const Route = createFileRoute("/aliments/$id")({
         { name: "description", content: description },
         { property: "og:title", content: `${food.name} — teneurs nutritionnelles` },
         { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },

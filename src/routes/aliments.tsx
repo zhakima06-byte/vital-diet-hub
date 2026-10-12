@@ -14,6 +14,8 @@ export const Route = createFileRoute("/aliments")({
           "Recherchez un aliment et consultez ses teneurs pour 100 g : phosphore, protéines, glucides, lipides, calcium, potassium, sodium, citrate.",
       },
       { property: "og:title", content: "Base de teneurs alimentaires — NutriSanté" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Filtrez par nutriment, classez par teneur et repérez les niveaux faible, modéré ou élevé.",

@@ -27,6 +27,8 @@ export const Route = createFileRoute("/")({
           "Calculez votre IMC et vos besoins caloriques, explorez les régimes alimentaires, les fiches par pathologie et les teneurs en nutriments.",
       },
       { property: "og:title", content: "NutriSanté — nutrition et nutrithérapie" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content:
