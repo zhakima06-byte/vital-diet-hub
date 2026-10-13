@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { ArrowUpDown, Download, Printer, Search } from "lucide-react";
+import { ArrowUpDown, Download, Printer, Search, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { FicheZincSheet } from "@/components/FicheZincSheet";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@/data/zinc";
 import { exportElementToPdf } from "@/lib/pdf";
 
-export const Route = createFileRoute("/nutriments/zinc")({
+export const Route = createFileRoute("/composition-nutritionnelle/mineraux/zinc")({
   head: () => ({
     meta: [
       { title: "Le zinc : rôle, apports et aliments les plus riches | NutriSanté" },
@@ -63,16 +63,27 @@ function ZincPage() {
     }
   };
 
-  const couleurDe = (key: ZincCategorie) => zincCategories.find((c) => c.key === key)!;
+  const couleurDe = (key: ZincCategorie) => {
+    const category = zincCategories.find((c) => c.key === key);
+    if (!category) throw new Error("Catégorie zinc inconnue");
+    return category;
+  };
 
   return (
     <AppShell>
       <div className="no-print">
+        <nav aria-label="Fil d’Ariane" className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+          <Link to="/composition-nutritionnelle" className="hover:text-primary">Composition nutritionnelle des aliments</Link>
+          <ChevronRight className="size-3 shrink-0" aria-hidden="true" />
+          <Link to="/composition-nutritionnelle/mineraux" className="hover:text-primary">Minéraux</Link>
+          <ChevronRight className="size-3 shrink-0" aria-hidden="true" />
+          <span aria-current="page">Zinc</span>
+        </nav>
         <header>
           <p className="text-[11px] font-semibold uppercase tracking-widest text-tone-blue">
             Fiche nutriment
           </p>
-          <h1 className="mt-1 text-2xl font-semibold">Le zinc</h1>
+          <h1 className="mt-1 text-2xl font-semibold">Zinc — aliments les plus riches en zinc</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Rôle, apports conseillés, absorption et aliments les plus riches. Teneurs indicatives
             pour 100 g, à valider avec une table officielle (ANSES-CIQUAL, USDA).
