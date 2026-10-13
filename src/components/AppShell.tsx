@@ -11,11 +11,11 @@ const nav = [
   { to: "/maladies", label: "Pathologies", icon: Stethoscope },
   { to: "/calculateurs", label: "Calculs", icon: Calculator },
   { to: "/aliments", label: "Aliments", icon: Apple },
-  { to: "/nutriments/zinc", label: "Zinc", icon: Sparkles },
+  { to: "/composition-nutritionnelle", label: "Composition", icon: Sparkles },
 ] as const;
 
 const navMobile = nav.filter((n) =>
-  ["/", "/fiches-regimes", "/compteur", "/maladies", "/aliments"].includes(n.to),
+  ["/", "/fiches-regimes", "/compteur", "/maladies", "/aliments", "/composition-nutritionnelle"].includes(n.to),
 );
 
 export function AppShell({ children }: { children: ReactNode }) {
