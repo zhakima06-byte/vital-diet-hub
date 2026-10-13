@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                 activeProps={{ className: "bg-accent text-accent-foreground" }}
               >
-                 <span className={item.to === "/composition-nutritionnelle" ? "text-[9px]" : ""}>{item.label}</span>
+                 {item.label}
               </Link>
             ))}
           </nav>
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 activeProps={{ className: "text-primary" }}
               >
                 <Icon className="size-5" />
-                {item.label}
+                <span className={item.to === "/composition-nutritionnelle" ? "text-[9px]" : ""}>{item.label}</span>
               </Link>
             );
           })}
