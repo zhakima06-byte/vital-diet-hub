@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { ArrowUpDown, ChevronRight, Info } from "lucide-react";
+import { ChevronRight, Info } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { alimentsFer, ferCategories, sourceFer, type FerCategorie } from "@/data/fer";
+import { alimentsFer, ferCategories, sourceFer } from "@/data/fer";
+import { MineralTable } from "@/components/MineralTable";
 
 export const Route = createFileRoute("/composition-nutritionnelle/mineraux/fer")({
   head: () => ({
@@ -19,22 +19,6 @@ export const Route = createFileRoute("/composition-nutritionnelle/mineraux/fer")
 });
 
 function FerPage() {
-  const [filtre, setFiltre] = useState<FerCategorie | "toutes">("toutes");
-  const [desc, setDesc] = useState(true);
-  const label = (k: FerCategorie) => ferCategories.find((c) => c.key === k)?.label ?? k;
-
-  const liste = useMemo(
-    () =>
-      alimentsFer
-        .filter((a) => filtre === "toutes" || a.categorie === filtre)
-        .sort((a, b) => {
-          if (a.fer === null) return 1;
-          if (b.fer === null) return -1;
-          return desc ? b.fer - a.fer : a.fer - b.fer;
-        }),
-    [filtre, desc],
-  );
-
   return (
     <AppShell>
       <nav aria-label="Fil d’Ariane" className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
@@ -58,43 +42,7 @@ function FerPage() {
         </ul>
       </section>
 
-      <div className="mt-6 flex flex-wrap gap-2">
-        {[{ key: "toutes" as const, label: "Toutes" }, ...ferCategories].map((c) => (
-          <button key={c.key} type="button" onClick={() => setFiltre(c.key)}
-            className={`rounded-full border px-3 py-1 text-xs font-medium ${filtre === c.key ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary"}`}>
-            {c.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[560px] text-sm">
-          <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
-            <tr>
-              <th className="p-3">Aliment</th>
-              <th className="p-3">Catégorie</th>
-              <th className="p-3">
-                <button type="button" onClick={() => setDesc(!desc)} className="inline-flex items-center gap-1 uppercase hover:text-primary">
-                  Fer (mg/100 g)<ArrowUpDown className="size-3" />
-                </button>
-              </th>
-              <th className="p-3">État</th>
-              <th className="p-3">Type de fer</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {liste.map((a) => (
-              <tr key={a.nom + a.etat}>
-                <td className="p-3 font-medium">{a.nom}</td>
-                <td className="p-3 text-muted-foreground">{label(a.categorie)}</td>
-                <td className="p-3 font-semibold tabular-nums">{a.fer === null ? <span className="font-normal text-muted-foreground">Variable — voir l’étiquette</span> : a.fer.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}</td>
-                <td className="p-3">{a.etat}</td>
-                <td className="p-3">{a.type}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <MineralTable rows={alimentsFer.map((a) => ({ nom: a.nom, categorie: a.categorie, valeur: a.fer, etat: a.etat, extra: a.type }))} categories={ferCategories} valeurLabel="Fer (mg/100 g)" extraLabel="Type de fer" />
       <p className="mt-3 text-xs text-muted-foreground">Source : {sourceFer}</p>
     </AppShell>
   );
