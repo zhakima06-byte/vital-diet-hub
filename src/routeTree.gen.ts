@@ -28,10 +28,10 @@ import { Route as FichesRegimesIndexRouteImport } from './routes/fiches-regimes.
 import { Route as FichesRegimesSlugRouteImport } from './routes/fiches-regimes.$slug'
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
-import { Route as NutrimentsZincRouteImport } from './routes/nutriments.zinc'
 import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
+import { Route as CompositionNutritionnelleMinerauxZincRouteImport } from './routes/composition-nutritionnelle.mineraux.zinc'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -131,11 +131,6 @@ const MaladiesSlugRoute = MaladiesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => MaladiesRoute,
 } as any)
-const NutrimentsZincRoute = NutrimentsZincRouteImport.update({
-  id: '/nutriments/zinc',
-  path: '/nutriments/zinc',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RegimesIndexRoute = RegimesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -150,6 +145,12 @@ const CompositionNutritionnelleMinerauxIndexRoute =
   CompositionNutritionnelleMinerauxIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxZincRoute =
+  CompositionNutritionnelleMinerauxZincRouteImport.update({
+    id: '/zinc',
+    path: '/zinc',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
 
@@ -169,13 +170,13 @@ export interface FileRoutesByFullPath {
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxRouteWithChildren
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
-  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
 export interface FileRoutesByTo {
@@ -188,13 +189,13 @@ export interface FileRoutesByTo {
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
-  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs': typeof CalculateursIndexRoute
   '/composition-nutritionnelle': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes': typeof FichesRegimesIndexRoute
   '/maladies': typeof MaladiesIndexRoute
   '/regimes': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
 export interface FileRoutesById {
@@ -214,13 +215,13 @@ export interface FileRoutesById {
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxRouteWithChildren
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
-  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
 export interface FileRouteTypes {
@@ -241,13 +242,13 @@ export interface FileRouteTypes {
     | '/composition-nutritionnelle/mineraux'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
-    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
     | '/fiches-regimes/'
     | '/maladies/'
     | '/regimes/'
+    | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -260,13 +261,13 @@ export interface FileRouteTypes {
     | '/calculateurs/dfg'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
-    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs'
     | '/composition-nutritionnelle'
     | '/fiches-regimes'
     | '/maladies'
     | '/regimes'
+    | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux'
   id:
     | '__root__'
@@ -285,13 +286,13 @@ export interface FileRouteTypes {
     | '/composition-nutritionnelle/mineraux'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
-    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
     | '/fiches-regimes/'
     | '/maladies/'
     | '/regimes/'
+    | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesById: FileRoutesById
 }
@@ -305,7 +306,6 @@ export interface RootRouteChildren {
   MaladiesRoute: typeof MaladiesRouteWithChildren
   MenusRoute: typeof MenusRoute
   RegimesRoute: typeof RegimesRouteWithChildren
-  NutrimentsZincRoute: typeof NutrimentsZincRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -443,13 +443,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MaladiesSlugRouteImport
       parentRoute: typeof MaladiesRoute
     }
-    '/nutriments/zinc': {
-      id: '/nutriments/zinc'
-      path: '/nutriments/zinc'
-      fullPath: '/nutriments/zinc'
-      preLoaderRoute: typeof NutrimentsZincRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/regimes/': {
       id: '/regimes/'
       path: '/'
@@ -469,6 +462,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/composition-nutritionnelle/mineraux/'
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxIndexRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/zinc': {
+      id: '/composition-nutritionnelle/mineraux/zinc'
+      path: '/zinc'
+      fullPath: '/composition-nutritionnelle/mineraux/zinc'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxZincRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
   }
@@ -503,11 +503,14 @@ const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
 )
 
 interface CompositionNutritionnelleMinerauxRouteChildren {
+  CompositionNutritionnelleMinerauxZincRoute: typeof CompositionNutritionnelleMinerauxZincRoute
   CompositionNutritionnelleMinerauxIndexRoute: typeof CompositionNutritionnelleMinerauxIndexRoute
 }
 
 const CompositionNutritionnelleMinerauxRouteChildren: CompositionNutritionnelleMinerauxRouteChildren =
   {
+    CompositionNutritionnelleMinerauxZincRoute:
+      CompositionNutritionnelleMinerauxZincRoute,
     CompositionNutritionnelleMinerauxIndexRoute:
       CompositionNutritionnelleMinerauxIndexRoute,
   }
@@ -585,7 +588,6 @@ const rootRouteChildren: RootRouteChildren = {
   MaladiesRoute: MaladiesRouteWithChildren,
   MenusRoute: MenusRoute,
   RegimesRoute: RegimesRouteWithChildren,
-  NutrimentsZincRoute: NutrimentsZincRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
