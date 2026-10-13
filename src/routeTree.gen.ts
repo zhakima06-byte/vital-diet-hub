@@ -28,6 +28,7 @@ import { Route as FichesRegimesIndexRouteImport } from './routes/fiches-regimes.
 import { Route as FichesRegimesSlugRouteImport } from './routes/fiches-regimes.$slug'
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
+import { Route as NutrimentsZincRouteImport } from './routes/nutriments.zinc'
 import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
@@ -131,6 +132,11 @@ const MaladiesSlugRoute = MaladiesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => MaladiesRoute,
 } as any)
+const NutrimentsZincRoute = NutrimentsZincRouteImport.update({
+  id: '/nutriments/zinc',
+  path: '/nutriments/zinc',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegimesIndexRoute = RegimesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxRouteWithChildren
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
+  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
+  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs': typeof CalculateursIndexRoute
   '/composition-nutritionnelle': typeof CompositionNutritionnelleIndexRoute
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxRouteWithChildren
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
+  '/nutriments/zinc': typeof NutrimentsZincRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/composition-nutritionnelle/mineraux'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
+    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/calculateurs/dfg'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
+    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs'
     | '/composition-nutritionnelle'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/composition-nutritionnelle/mineraux'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
+    | '/nutriments/zinc'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   MaladiesRoute: typeof MaladiesRouteWithChildren
   MenusRoute: typeof MenusRoute
   RegimesRoute: typeof RegimesRouteWithChildren
+  NutrimentsZincRoute: typeof NutrimentsZincRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -442,6 +455,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/maladies/$slug'
       preLoaderRoute: typeof MaladiesSlugRouteImport
       parentRoute: typeof MaladiesRoute
+    }
+    '/nutriments/zinc': {
+      id: '/nutriments/zinc'
+      path: '/nutriments/zinc'
+      fullPath: '/nutriments/zinc'
+      preLoaderRoute: typeof NutrimentsZincRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/regimes/': {
       id: '/regimes/'
@@ -588,6 +608,7 @@ const rootRouteChildren: RootRouteChildren = {
   MaladiesRoute: MaladiesRouteWithChildren,
   MenusRoute: MenusRoute,
   RegimesRoute: RegimesRouteWithChildren,
+  NutrimentsZincRoute: NutrimentsZincRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
