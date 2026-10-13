@@ -1,5 +1,7 @@
 # Roadmap NutriSanté
 
+- [x] Regrouper le zinc dans Composition nutritionnelle > Minéraux, préserver ses outils et vérifier son accès ordinateur/téléphone.
+
 - [x] Simplifier uniquement l’interface Menus autour du programme personnalisé 7 jours et du régime végétarien ; vérifier ordinateur et téléphone.
 
 - [x] Moteur de calcul nutritionnel centralisé (`src/lib/nutrition.ts`, `calculateNutritionNeeds`)
