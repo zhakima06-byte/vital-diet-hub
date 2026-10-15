@@ -33,6 +33,7 @@ import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
 import { Route as CompositionNutritionnelleMinerauxFerRouteImport } from './routes/composition-nutritionnelle.mineraux.fer'
+import { Route as CompositionNutritionnelleMinerauxMagnesiumRouteImport } from './routes/composition-nutritionnelle.mineraux.magnesium'
 import { Route as CompositionNutritionnelleMinerauxZincRouteImport } from './routes/composition-nutritionnelle.mineraux.zinc'
 
 const IndexRoute = IndexRouteImport.update({
@@ -160,6 +161,12 @@ const CompositionNutritionnelleMinerauxFerRoute =
     path: '/fer',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
+const CompositionNutritionnelleMinerauxMagnesiumRoute =
+  CompositionNutritionnelleMinerauxMagnesiumRouteImport.update({
+    id: '/magnesium',
+    path: '/magnesium',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
 const CompositionNutritionnelleMinerauxZincRoute =
   CompositionNutritionnelleMinerauxZincRouteImport.update({
     id: '/zinc',
@@ -191,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -212,6 +220,7 @@ export interface FileRoutesByTo {
   '/maladies': typeof MaladiesIndexRoute
   '/regimes': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -240,6 +249,7 @@ export interface FileRoutesById {
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/maladies/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesByTo: FileRoutesByTo
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
     | '/maladies'
     | '/regimes'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux'
   id:
@@ -317,6 +329,7 @@ export interface FileRouteTypes {
     | '/maladies/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesById: FileRoutesById
@@ -504,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxFerRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
+    '/composition-nutritionnelle/mineraux/magnesium': {
+      id: '/composition-nutritionnelle/mineraux/magnesium'
+      path: '/magnesium'
+      fullPath: '/composition-nutritionnelle/mineraux/magnesium'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxMagnesiumRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
     '/composition-nutritionnelle/mineraux/zinc': {
       id: '/composition-nutritionnelle/mineraux/zinc'
       path: '/zinc'
@@ -544,6 +564,7 @@ const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
 
 interface CompositionNutritionnelleMinerauxRouteChildren {
   CompositionNutritionnelleMinerauxFerRoute: typeof CompositionNutritionnelleMinerauxFerRoute
+  CompositionNutritionnelleMinerauxMagnesiumRoute: typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   CompositionNutritionnelleMinerauxZincRoute: typeof CompositionNutritionnelleMinerauxZincRoute
   CompositionNutritionnelleMinerauxIndexRoute: typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -552,6 +573,8 @@ const CompositionNutritionnelleMinerauxRouteChildren: CompositionNutritionnelleM
   {
     CompositionNutritionnelleMinerauxFerRoute:
       CompositionNutritionnelleMinerauxFerRoute,
+    CompositionNutritionnelleMinerauxMagnesiumRoute:
+      CompositionNutritionnelleMinerauxMagnesiumRoute,
     CompositionNutritionnelleMinerauxZincRoute:
       CompositionNutritionnelleMinerauxZincRoute,
     CompositionNutritionnelleMinerauxIndexRoute:
