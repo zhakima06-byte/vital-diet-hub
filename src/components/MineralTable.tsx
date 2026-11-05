@@ -33,7 +33,7 @@ export function MineralTable({ rows, categories, valeurLabel, extraLabel, refere
         <thead className="bg-muted text-left text-xs uppercase text-muted-foreground"><tr>
           <th className="p-3">Aliment</th><th className="p-3">Catégorie</th>{sortHeader("teneur", valeurLabel)}
           {showBase && <th className="p-3">Quantité</th>}
-          {references.map((r) => <ReferenceHeader key={r.label} header={sortHeader(r.label, `% ${limit ? "limite" : "ANC"}${r.label ? ` (${r.label})` : ""}`)} />)}
+          {references.map((r) => <th key={r.label} className="p-3" aria-sort={sortKey === r.label ? desc ? "descending" : "ascending" : "none"}><Button type="button" variant="ghost" size="sm" className="h-auto whitespace-normal p-0 text-left uppercase" onClick={() => sort(r.label)}>% {limit ? "limite" : "ANC"}{r.label ? ` (${r.label})` : ""}<ArrowUpDown aria-hidden="true" className="size-3" /></Button></th>)}
           <th className="p-3">État</th>{extraLabel && <th className="p-3">{extraLabel}</th>}
         </tr></thead>
         <tbody className="divide-y divide-border">
@@ -50,4 +50,3 @@ export function MineralTable({ rows, categories, valeurLabel, extraLabel, refere
     </div>
   </>;
 }
-function ReferenceHeader({ header }: { header: React.ReactNode }) { return header; }

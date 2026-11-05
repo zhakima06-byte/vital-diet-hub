@@ -33,9 +33,17 @@ import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
 import { Route as CompositionNutritionnelleMinerauxCalciumRouteImport } from './routes/composition-nutritionnelle.mineraux.calcium'
+import { Route as CompositionNutritionnelleMinerauxChromeRouteImport } from './routes/composition-nutritionnelle.mineraux.chrome'
+import { Route as CompositionNutritionnelleMinerauxCuivreRouteImport } from './routes/composition-nutritionnelle.mineraux.cuivre'
 import { Route as CompositionNutritionnelleMinerauxFerRouteImport } from './routes/composition-nutritionnelle.mineraux.fer'
+import { Route as CompositionNutritionnelleMinerauxIodeRouteImport } from './routes/composition-nutritionnelle.mineraux.iode'
 import { Route as CompositionNutritionnelleMinerauxMagnesiumRouteImport } from './routes/composition-nutritionnelle.mineraux.magnesium'
+import { Route as CompositionNutritionnelleMinerauxManganeseRouteImport } from './routes/composition-nutritionnelle.mineraux.manganese'
+import { Route as CompositionNutritionnelleMinerauxMolybdeneRouteImport } from './routes/composition-nutritionnelle.mineraux.molybdene'
+import { Route as CompositionNutritionnelleMinerauxPhosphoreRouteImport } from './routes/composition-nutritionnelle.mineraux.phosphore'
+import { Route as CompositionNutritionnelleMinerauxPotassiumRouteImport } from './routes/composition-nutritionnelle.mineraux.potassium'
 import { Route as CompositionNutritionnelleMinerauxSeleniumRouteImport } from './routes/composition-nutritionnelle.mineraux.selenium'
+import { Route as CompositionNutritionnelleMinerauxSodiumRouteImport } from './routes/composition-nutritionnelle.mineraux.sodium'
 import { Route as CompositionNutritionnelleMinerauxZincRouteImport } from './routes/composition-nutritionnelle.mineraux.zinc'
 
 const IndexRoute = IndexRouteImport.update({
@@ -163,10 +171,28 @@ const CompositionNutritionnelleMinerauxCalciumRoute =
     path: '/calcium',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
+const CompositionNutritionnelleMinerauxChromeRoute =
+  CompositionNutritionnelleMinerauxChromeRouteImport.update({
+    id: '/chrome',
+    path: '/chrome',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxCuivreRoute =
+  CompositionNutritionnelleMinerauxCuivreRouteImport.update({
+    id: '/cuivre',
+    path: '/cuivre',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
 const CompositionNutritionnelleMinerauxFerRoute =
   CompositionNutritionnelleMinerauxFerRouteImport.update({
     id: '/fer',
     path: '/fer',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxIodeRoute =
+  CompositionNutritionnelleMinerauxIodeRouteImport.update({
+    id: '/iode',
+    path: '/iode',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
 const CompositionNutritionnelleMinerauxMagnesiumRoute =
@@ -175,10 +201,40 @@ const CompositionNutritionnelleMinerauxMagnesiumRoute =
     path: '/magnesium',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
+const CompositionNutritionnelleMinerauxManganeseRoute =
+  CompositionNutritionnelleMinerauxManganeseRouteImport.update({
+    id: '/manganese',
+    path: '/manganese',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxMolybdeneRoute =
+  CompositionNutritionnelleMinerauxMolybdeneRouteImport.update({
+    id: '/molybdene',
+    path: '/molybdene',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxPhosphoreRoute =
+  CompositionNutritionnelleMinerauxPhosphoreRouteImport.update({
+    id: '/phosphore',
+    path: '/phosphore',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxPotassiumRoute =
+  CompositionNutritionnelleMinerauxPotassiumRouteImport.update({
+    id: '/potassium',
+    path: '/potassium',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
 const CompositionNutritionnelleMinerauxSeleniumRoute =
   CompositionNutritionnelleMinerauxSeleniumRouteImport.update({
     id: '/selenium',
     path: '/selenium',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
+const CompositionNutritionnelleMinerauxSodiumRoute =
+  CompositionNutritionnelleMinerauxSodiumRouteImport.update({
+    id: '/sodium',
+    path: '/sodium',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
 const CompositionNutritionnelleMinerauxZincRoute =
@@ -212,9 +268,17 @@ export interface FileRoutesByFullPath {
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
+  '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
+  '/composition-nutritionnelle/mineraux/cuivre': typeof CompositionNutritionnelleMinerauxCuivreRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/iode': typeof CompositionNutritionnelleMinerauxIodeRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
+  '/composition-nutritionnelle/mineraux/manganese': typeof CompositionNutritionnelleMinerauxManganeseRoute
+  '/composition-nutritionnelle/mineraux/molybdene': typeof CompositionNutritionnelleMinerauxMolybdeneRoute
+  '/composition-nutritionnelle/mineraux/phosphore': typeof CompositionNutritionnelleMinerauxPhosphoreRoute
+  '/composition-nutritionnelle/mineraux/potassium': typeof CompositionNutritionnelleMinerauxPotassiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
+  '/composition-nutritionnelle/mineraux/sodium': typeof CompositionNutritionnelleMinerauxSodiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -236,9 +300,17 @@ export interface FileRoutesByTo {
   '/maladies': typeof MaladiesIndexRoute
   '/regimes': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
+  '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
+  '/composition-nutritionnelle/mineraux/cuivre': typeof CompositionNutritionnelleMinerauxCuivreRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/iode': typeof CompositionNutritionnelleMinerauxIodeRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
+  '/composition-nutritionnelle/mineraux/manganese': typeof CompositionNutritionnelleMinerauxManganeseRoute
+  '/composition-nutritionnelle/mineraux/molybdene': typeof CompositionNutritionnelleMinerauxMolybdeneRoute
+  '/composition-nutritionnelle/mineraux/phosphore': typeof CompositionNutritionnelleMinerauxPhosphoreRoute
+  '/composition-nutritionnelle/mineraux/potassium': typeof CompositionNutritionnelleMinerauxPotassiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
+  '/composition-nutritionnelle/mineraux/sodium': typeof CompositionNutritionnelleMinerauxSodiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -267,9 +339,17 @@ export interface FileRoutesById {
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
+  '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
+  '/composition-nutritionnelle/mineraux/cuivre': typeof CompositionNutritionnelleMinerauxCuivreRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
+  '/composition-nutritionnelle/mineraux/iode': typeof CompositionNutritionnelleMinerauxIodeRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
+  '/composition-nutritionnelle/mineraux/manganese': typeof CompositionNutritionnelleMinerauxManganeseRoute
+  '/composition-nutritionnelle/mineraux/molybdene': typeof CompositionNutritionnelleMinerauxMolybdeneRoute
+  '/composition-nutritionnelle/mineraux/phosphore': typeof CompositionNutritionnelleMinerauxPhosphoreRoute
+  '/composition-nutritionnelle/mineraux/potassium': typeof CompositionNutritionnelleMinerauxPotassiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
+  '/composition-nutritionnelle/mineraux/sodium': typeof CompositionNutritionnelleMinerauxSodiumRoute
   '/composition-nutritionnelle/mineraux/zinc': typeof CompositionNutritionnelleMinerauxZincRoute
   '/composition-nutritionnelle/mineraux/': typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -299,9 +379,17 @@ export interface FileRouteTypes {
     | '/maladies/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/calcium'
+    | '/composition-nutritionnelle/mineraux/chrome'
+    | '/composition-nutritionnelle/mineraux/cuivre'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/iode'
     | '/composition-nutritionnelle/mineraux/magnesium'
+    | '/composition-nutritionnelle/mineraux/manganese'
+    | '/composition-nutritionnelle/mineraux/molybdene'
+    | '/composition-nutritionnelle/mineraux/phosphore'
+    | '/composition-nutritionnelle/mineraux/potassium'
     | '/composition-nutritionnelle/mineraux/selenium'
+    | '/composition-nutritionnelle/mineraux/sodium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesByTo: FileRoutesByTo
@@ -323,9 +411,17 @@ export interface FileRouteTypes {
     | '/maladies'
     | '/regimes'
     | '/composition-nutritionnelle/mineraux/calcium'
+    | '/composition-nutritionnelle/mineraux/chrome'
+    | '/composition-nutritionnelle/mineraux/cuivre'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/iode'
     | '/composition-nutritionnelle/mineraux/magnesium'
+    | '/composition-nutritionnelle/mineraux/manganese'
+    | '/composition-nutritionnelle/mineraux/molybdene'
+    | '/composition-nutritionnelle/mineraux/phosphore'
+    | '/composition-nutritionnelle/mineraux/potassium'
     | '/composition-nutritionnelle/mineraux/selenium'
+    | '/composition-nutritionnelle/mineraux/sodium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux'
   id:
@@ -353,9 +449,17 @@ export interface FileRouteTypes {
     | '/maladies/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/calcium'
+    | '/composition-nutritionnelle/mineraux/chrome'
+    | '/composition-nutritionnelle/mineraux/cuivre'
     | '/composition-nutritionnelle/mineraux/fer'
+    | '/composition-nutritionnelle/mineraux/iode'
     | '/composition-nutritionnelle/mineraux/magnesium'
+    | '/composition-nutritionnelle/mineraux/manganese'
+    | '/composition-nutritionnelle/mineraux/molybdene'
+    | '/composition-nutritionnelle/mineraux/phosphore'
+    | '/composition-nutritionnelle/mineraux/potassium'
     | '/composition-nutritionnelle/mineraux/selenium'
+    | '/composition-nutritionnelle/mineraux/sodium'
     | '/composition-nutritionnelle/mineraux/zinc'
     | '/composition-nutritionnelle/mineraux/'
   fileRoutesById: FileRoutesById
@@ -543,11 +647,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxCalciumRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
+    '/composition-nutritionnelle/mineraux/chrome': {
+      id: '/composition-nutritionnelle/mineraux/chrome'
+      path: '/chrome'
+      fullPath: '/composition-nutritionnelle/mineraux/chrome'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxChromeRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/cuivre': {
+      id: '/composition-nutritionnelle/mineraux/cuivre'
+      path: '/cuivre'
+      fullPath: '/composition-nutritionnelle/mineraux/cuivre'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxCuivreRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
     '/composition-nutritionnelle/mineraux/fer': {
       id: '/composition-nutritionnelle/mineraux/fer'
       path: '/fer'
       fullPath: '/composition-nutritionnelle/mineraux/fer'
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxFerRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/iode': {
+      id: '/composition-nutritionnelle/mineraux/iode'
+      path: '/iode'
+      fullPath: '/composition-nutritionnelle/mineraux/iode'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxIodeRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
     '/composition-nutritionnelle/mineraux/magnesium': {
@@ -557,11 +682,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxMagnesiumRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
+    '/composition-nutritionnelle/mineraux/manganese': {
+      id: '/composition-nutritionnelle/mineraux/manganese'
+      path: '/manganese'
+      fullPath: '/composition-nutritionnelle/mineraux/manganese'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxManganeseRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/molybdene': {
+      id: '/composition-nutritionnelle/mineraux/molybdene'
+      path: '/molybdene'
+      fullPath: '/composition-nutritionnelle/mineraux/molybdene'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxMolybdeneRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/phosphore': {
+      id: '/composition-nutritionnelle/mineraux/phosphore'
+      path: '/phosphore'
+      fullPath: '/composition-nutritionnelle/mineraux/phosphore'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxPhosphoreRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/potassium': {
+      id: '/composition-nutritionnelle/mineraux/potassium'
+      path: '/potassium'
+      fullPath: '/composition-nutritionnelle/mineraux/potassium'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxPotassiumRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
     '/composition-nutritionnelle/mineraux/selenium': {
       id: '/composition-nutritionnelle/mineraux/selenium'
       path: '/selenium'
       fullPath: '/composition-nutritionnelle/mineraux/selenium'
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxSeleniumRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
+    '/composition-nutritionnelle/mineraux/sodium': {
+      id: '/composition-nutritionnelle/mineraux/sodium'
+      path: '/sodium'
+      fullPath: '/composition-nutritionnelle/mineraux/sodium'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxSodiumRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
     '/composition-nutritionnelle/mineraux/zinc': {
@@ -604,9 +764,17 @@ const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
 
 interface CompositionNutritionnelleMinerauxRouteChildren {
   CompositionNutritionnelleMinerauxCalciumRoute: typeof CompositionNutritionnelleMinerauxCalciumRoute
+  CompositionNutritionnelleMinerauxChromeRoute: typeof CompositionNutritionnelleMinerauxChromeRoute
+  CompositionNutritionnelleMinerauxCuivreRoute: typeof CompositionNutritionnelleMinerauxCuivreRoute
   CompositionNutritionnelleMinerauxFerRoute: typeof CompositionNutritionnelleMinerauxFerRoute
+  CompositionNutritionnelleMinerauxIodeRoute: typeof CompositionNutritionnelleMinerauxIodeRoute
   CompositionNutritionnelleMinerauxMagnesiumRoute: typeof CompositionNutritionnelleMinerauxMagnesiumRoute
+  CompositionNutritionnelleMinerauxManganeseRoute: typeof CompositionNutritionnelleMinerauxManganeseRoute
+  CompositionNutritionnelleMinerauxMolybdeneRoute: typeof CompositionNutritionnelleMinerauxMolybdeneRoute
+  CompositionNutritionnelleMinerauxPhosphoreRoute: typeof CompositionNutritionnelleMinerauxPhosphoreRoute
+  CompositionNutritionnelleMinerauxPotassiumRoute: typeof CompositionNutritionnelleMinerauxPotassiumRoute
   CompositionNutritionnelleMinerauxSeleniumRoute: typeof CompositionNutritionnelleMinerauxSeleniumRoute
+  CompositionNutritionnelleMinerauxSodiumRoute: typeof CompositionNutritionnelleMinerauxSodiumRoute
   CompositionNutritionnelleMinerauxZincRoute: typeof CompositionNutritionnelleMinerauxZincRoute
   CompositionNutritionnelleMinerauxIndexRoute: typeof CompositionNutritionnelleMinerauxIndexRoute
 }
@@ -615,12 +783,28 @@ const CompositionNutritionnelleMinerauxRouteChildren: CompositionNutritionnelleM
   {
     CompositionNutritionnelleMinerauxCalciumRoute:
       CompositionNutritionnelleMinerauxCalciumRoute,
+    CompositionNutritionnelleMinerauxChromeRoute:
+      CompositionNutritionnelleMinerauxChromeRoute,
+    CompositionNutritionnelleMinerauxCuivreRoute:
+      CompositionNutritionnelleMinerauxCuivreRoute,
     CompositionNutritionnelleMinerauxFerRoute:
       CompositionNutritionnelleMinerauxFerRoute,
+    CompositionNutritionnelleMinerauxIodeRoute:
+      CompositionNutritionnelleMinerauxIodeRoute,
     CompositionNutritionnelleMinerauxMagnesiumRoute:
       CompositionNutritionnelleMinerauxMagnesiumRoute,
+    CompositionNutritionnelleMinerauxManganeseRoute:
+      CompositionNutritionnelleMinerauxManganeseRoute,
+    CompositionNutritionnelleMinerauxMolybdeneRoute:
+      CompositionNutritionnelleMinerauxMolybdeneRoute,
+    CompositionNutritionnelleMinerauxPhosphoreRoute:
+      CompositionNutritionnelleMinerauxPhosphoreRoute,
+    CompositionNutritionnelleMinerauxPotassiumRoute:
+      CompositionNutritionnelleMinerauxPotassiumRoute,
     CompositionNutritionnelleMinerauxSeleniumRoute:
       CompositionNutritionnelleMinerauxSeleniumRoute,
+    CompositionNutritionnelleMinerauxSodiumRoute:
+      CompositionNutritionnelleMinerauxSodiumRoute,
     CompositionNutritionnelleMinerauxZincRoute:
       CompositionNutritionnelleMinerauxZincRoute,
     CompositionNutritionnelleMinerauxIndexRoute:

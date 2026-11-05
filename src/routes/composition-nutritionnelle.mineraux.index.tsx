@@ -6,9 +6,9 @@ import { nutrientSections } from "@/data/nutrientSections";
 export const Route = createFileRoute("/composition-nutritionnelle/mineraux/")({
   head: () => ({ meta: [
     { title: "Minéraux — Composition nutritionnelle | NutriSanté" },
-    { name: "description", content: "Consultez les fiches sur les minéraux : zinc, fer, aliments les plus riches, apports et absorption, avec fiche imprimable." },
+    { name: "description", content: "Teneur en minéraux : calcium, magnésium, fer, zinc, iode, potassium et autres minéraux. Tableaux, recherche, repères et précautions." },
     { property: "og:title", content: "Minéraux alimentaires — NutriSanté" },
-    { property: "og:description", content: "Retrouvez le zinc, le fer et leurs sources alimentaires dans la rubrique Minéraux." },
+    { property: "og:description", content: "Comparez les sources alimentaires des minéraux et leurs repères nutritionnels." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
@@ -21,6 +21,7 @@ function MineralsPage() {
     <AppShell>
       <Link to="/composition-nutritionnelle" className="inline-flex items-start gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="mt-0.5 size-4 shrink-0" />Composition nutritionnelle des aliments</Link>
       <h1 className="mt-4 text-2xl font-semibold">Minéraux</h1>
+      <h2 className="mt-2 text-lg text-muted-foreground">Teneur en minéraux</h2>
       <div className="mt-6 divide-y divide-border border-y border-border">
         {minerals?.entries.map((entry) => (
           <Link key={entry.key} to={entry.to} className="flex items-center justify-between gap-4 py-5 font-semibold hover:text-primary">
