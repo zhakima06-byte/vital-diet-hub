@@ -32,6 +32,7 @@ import { Route as NutrimentsZincRouteImport } from './routes/nutriments.zinc'
 import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
+import { Route as CompositionNutritionnelleMinerauxCalciumRouteImport } from './routes/composition-nutritionnelle.mineraux.calcium'
 import { Route as CompositionNutritionnelleMinerauxFerRouteImport } from './routes/composition-nutritionnelle.mineraux.fer'
 import { Route as CompositionNutritionnelleMinerauxMagnesiumRouteImport } from './routes/composition-nutritionnelle.mineraux.magnesium'
 import { Route as CompositionNutritionnelleMinerauxSeleniumRouteImport } from './routes/composition-nutritionnelle.mineraux.selenium'
@@ -156,6 +157,12 @@ const CompositionNutritionnelleMinerauxIndexRoute =
     path: '/',
     getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
   } as any)
+const CompositionNutritionnelleMinerauxCalciumRoute =
+  CompositionNutritionnelleMinerauxCalciumRouteImport.update({
+    id: '/calcium',
+    path: '/calcium',
+    getParentRoute: () => CompositionNutritionnelleMinerauxRoute,
+  } as any)
 const CompositionNutritionnelleMinerauxFerRoute =
   CompositionNutritionnelleMinerauxFerRouteImport.update({
     id: '/fer',
@@ -204,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
@@ -227,6 +235,7 @@ export interface FileRoutesByTo {
   '/fiches-regimes': typeof FichesRegimesIndexRoute
   '/maladies': typeof MaladiesIndexRoute
   '/regimes': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
@@ -257,6 +266,7 @@ export interface FileRoutesById {
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
+  '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/fer': typeof CompositionNutritionnelleMinerauxFerRoute
   '/composition-nutritionnelle/mineraux/magnesium': typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   '/composition-nutritionnelle/mineraux/selenium': typeof CompositionNutritionnelleMinerauxSeleniumRoute
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/fiches-regimes/'
     | '/maladies/'
     | '/regimes/'
+    | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/fer'
     | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/selenium'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/fiches-regimes'
     | '/maladies'
     | '/regimes'
+    | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/fer'
     | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/selenium'
@@ -340,6 +352,7 @@ export interface FileRouteTypes {
     | '/fiches-regimes/'
     | '/maladies/'
     | '/regimes/'
+    | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/fer'
     | '/composition-nutritionnelle/mineraux/magnesium'
     | '/composition-nutritionnelle/mineraux/selenium'
@@ -523,6 +536,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionNutritionnelleMinerauxIndexRouteImport
       parentRoute: typeof CompositionNutritionnelleMinerauxRoute
     }
+    '/composition-nutritionnelle/mineraux/calcium': {
+      id: '/composition-nutritionnelle/mineraux/calcium'
+      path: '/calcium'
+      fullPath: '/composition-nutritionnelle/mineraux/calcium'
+      preLoaderRoute: typeof CompositionNutritionnelleMinerauxCalciumRouteImport
+      parentRoute: typeof CompositionNutritionnelleMinerauxRoute
+    }
     '/composition-nutritionnelle/mineraux/fer': {
       id: '/composition-nutritionnelle/mineraux/fer'
       path: '/fer'
@@ -583,6 +603,7 @@ const CalculateursRouteWithChildren = CalculateursRoute._addFileChildren(
 )
 
 interface CompositionNutritionnelleMinerauxRouteChildren {
+  CompositionNutritionnelleMinerauxCalciumRoute: typeof CompositionNutritionnelleMinerauxCalciumRoute
   CompositionNutritionnelleMinerauxFerRoute: typeof CompositionNutritionnelleMinerauxFerRoute
   CompositionNutritionnelleMinerauxMagnesiumRoute: typeof CompositionNutritionnelleMinerauxMagnesiumRoute
   CompositionNutritionnelleMinerauxSeleniumRoute: typeof CompositionNutritionnelleMinerauxSeleniumRoute
@@ -592,6 +613,8 @@ interface CompositionNutritionnelleMinerauxRouteChildren {
 
 const CompositionNutritionnelleMinerauxRouteChildren: CompositionNutritionnelleMinerauxRouteChildren =
   {
+    CompositionNutritionnelleMinerauxCalciumRoute:
+      CompositionNutritionnelleMinerauxCalciumRoute,
     CompositionNutritionnelleMinerauxFerRoute:
       CompositionNutritionnelleMinerauxFerRoute,
     CompositionNutritionnelleMinerauxMagnesiumRoute:
