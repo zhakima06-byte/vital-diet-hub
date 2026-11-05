@@ -3,6 +3,8 @@ import { useMemo, useRef, useState } from "react";
 import { ArrowUpDown, Download, Printer, Search, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { FicheZincSheet } from "@/components/FicheZincSheet";
+import { MineralReferenceTable } from "@/components/MineralSheet";
+import { mineralSheets } from "@/data/mineralSheets";
 import {
   absorptionZinc,
   alimentsZinc,
@@ -245,6 +247,11 @@ function ZincPage() {
               );
             })}
           </ul>
+        </section>
+
+        <section className="mt-6">
+          <h2 className="text-lg font-semibold">Teneur en zinc et pourcentage du repère adulte</h2>
+          <MineralReferenceTable data={mineralSheets.zinc} />
         </section>
 
         <section className="card-soft mt-6 p-4">
