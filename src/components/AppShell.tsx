@@ -20,10 +20,10 @@ const navMobile = nav.filter((n) =>
 
 export function AppShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen pb-24 md:pb-0">
+    <div className="min-h-screen pb-24 xl:pb-0">
       <header className="no-print sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex shrink-0 items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
               <Leaf className="size-5" />
             </span>
@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="font-display text-lg font-bold text-tone-blue">Dr ZALEGH</span>
             </div>
           </Link>
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 xl:flex">
             {nav.map((item) => (
               <Link
                 key={item.to}
@@ -57,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </p>
       </footer>
 
-      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur xl:hidden">
         <div className="mx-auto flex max-w-md">
           {navMobile.map((item) => {
             const Icon = item.icon;

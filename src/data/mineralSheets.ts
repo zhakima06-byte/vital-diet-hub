@@ -4,7 +4,7 @@ export interface MineralSheetData { key: string; name: string; unit: string; ref
 
 export const mineralFoodCategories = [{"key": "fruits", "label": "Fruits"}, {"key": "legumes", "label": "Légumes / algues"}, {"key": "legumineuses", "label": "Légumineuses"}, {"key": "cereales", "label": "Céréales"}, {"key": "viandes-poissons", "label": "Viandes / poissons"}, {"key": "laitiers", "label": "Produits laitiers"}, {"key": "graines", "label": "Fruits à coque / graines"}, {"key": "oeufs", "label": "Œufs"}, {"key": "autres", "label": "Autres / condiments"}];
 
-export const mineralSheets: Record<string, MineralSheetData> = {
+export const mineralSheets: Record<"potassium" | "iode" | "cuivre" | "manganese" | "chrome" | "molybdene" | "phosphore" | "sodium" | "zinc", MineralSheetData> = {
   "potassium": {
     "key": "potassium",
     "name": "potassium",

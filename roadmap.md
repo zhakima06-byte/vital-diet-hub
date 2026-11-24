@@ -1,6 +1,6 @@
 # Roadmap NutriSanté
 
-- [ ] Ajouter les fiches minérales du document, les pourcentages, la recherche et les précautions ; préserver le zinc et vérifier ordinateur/téléphone.
+- [x] Ajouter les fiches minérales du document, les pourcentages, la recherche et les précautions ; préserver le zinc et vérifier ordinateur/téléphone.
 
 - [x] Regrouper le zinc dans Composition nutritionnelle > Minéraux, préserver ses outils et vérifier son accès ordinateur/téléphone.
 
