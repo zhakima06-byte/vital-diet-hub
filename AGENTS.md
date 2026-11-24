@@ -13,3 +13,4 @@
 - Export personalized menu weeks through the existing PDF helper and a dedicated read-only sheet, so downloads reflect the displayed generated meals without another menu engine.
 - Organize nutrient content under composition-nutritionnelle/category/nutrient routes with Outlet layouts and a shared section registry; hide empty groups and redirect legacy nutrient URLs to avoid duplicate content while preserving old links.
 - Use the shared mineral table and reference-percentage helper for mineral sheets; keep serving bases explicit so mass, volume and salt servings cannot be confused.
+- Keep fermentation recipe data and preparation parameters in one shared module; the recipe gallery and dialogs present the same records to avoid conflicting salt bases.
