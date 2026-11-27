@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Apple, FileDown, Flame, LineChart, Salad, Stethoscope } from "lucide-react";
+import { Apple, CookingPot, FileDown, Flame, LineChart, Salad, Stethoscope } from "lucide-react";
 import { AppShell, MedicalDisclaimer } from "@/components/AppShell";
 import { diets } from "@/data/diets";
 import { diseases } from "@/data/diseases";
@@ -392,7 +392,7 @@ function Index() {
         </section>
       )}
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-3">
+      <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link to="/regimes" className="card-soft p-5">
           <Salad className="size-6 text-primary" />
           <h2 className="mt-2 text-base font-semibold">Régimes alimentaires</h2>
@@ -412,6 +412,13 @@ function Index() {
           <h2 className="mt-2 text-base font-semibold">Teneurs alimentaires</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Phosphore, potassium, sodium, citrate… recherche et classement.
+          </p>
+        </Link>
+        <Link to="/recettes" className="card-soft p-5">
+          <CookingPot className="size-6 text-primary" />
+          <h2 className="mt-2 text-base font-semibold">Recettes</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Bibliothèque culinaire : légumes lacto-fermentés et fiches détaillées.
           </p>
         </Link>
       </section>

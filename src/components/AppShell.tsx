@@ -16,7 +16,7 @@ const nav = [
 ] as const;
 
 const navMobile = nav.filter((n) =>
-  ["/", "/fiches-regimes", "/compteur", "/maladies", "/aliments", "/composition-nutritionnelle"].includes(n.to),
+  ["/", "/fiches-regimes", "/compteur", "/recettes", "/maladies", "/aliments", "/composition-nutritionnelle"].includes(n.to),
 );
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -47,6 +47,15 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
         </div>
+        <nav aria-label="Navigation principale" className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 pb-2 xl:hidden">
+          {nav.map((item) => (
+            <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }}
+              className="shrink-0 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground"
+              activeProps={{ className: "border-primary bg-primary text-primary-foreground" }}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
@@ -67,7 +76,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
-                className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium text-muted-foreground"
+                className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-medium text-muted-foreground"
                 activeProps={{ className: "text-primary" }}
               >
                 <Icon className="size-5" />
