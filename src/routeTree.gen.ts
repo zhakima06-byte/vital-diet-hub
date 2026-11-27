@@ -30,6 +30,8 @@ import { Route as FichesRegimesSlugRouteImport } from './routes/fiches-regimes.$
 import { Route as MaladiesIndexRouteImport } from './routes/maladies.index'
 import { Route as MaladiesSlugRouteImport } from './routes/maladies.$slug'
 import { Route as NutrimentsZincRouteImport } from './routes/nutriments.zinc'
+import { Route as RecettesIndexRouteImport } from './routes/recettes.index'
+import { Route as RecettesIdRouteImport } from './routes/recettes.$id'
 import { Route as RegimesIndexRouteImport } from './routes/regimes.index'
 import { Route as RegimesSlugRouteImport } from './routes/regimes.$slug'
 import { Route as CompositionNutritionnelleMinerauxIndexRouteImport } from './routes/composition-nutritionnelle.mineraux.index'
@@ -155,6 +157,16 @@ const NutrimentsZincRoute = NutrimentsZincRouteImport.update({
   path: '/nutriments/zinc',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecettesIndexRoute = RecettesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RecettesRoute,
+} as any)
+const RecettesIdRoute = RecettesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => RecettesRoute,
+} as any)
 const RegimesIndexRoute = RegimesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -259,7 +271,7 @@ export interface FileRoutesByFullPath {
   '/fiches-regimes': typeof FichesRegimesRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/menus': typeof MenusRoute
-  '/recettes': typeof RecettesRoute
+  '/recettes': typeof RecettesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
@@ -268,11 +280,13 @@ export interface FileRoutesByFullPath {
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/nutriments/zinc': typeof NutrimentsZincRoute
+  '/recettes/$id': typeof RecettesIdRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
+  '/recettes/': typeof RecettesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
@@ -294,18 +308,19 @@ export interface FileRoutesByTo {
   '/aliments': typeof AlimentsRouteWithChildren
   '/compteur': typeof CompteurRoute
   '/menus': typeof MenusRoute
-  '/recettes': typeof RecettesRoute
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
   '/calculateurs/dfg': typeof CalculateursDfgRoute
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/nutriments/zinc': typeof NutrimentsZincRoute
+  '/recettes/$id': typeof RecettesIdRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs': typeof CalculateursIndexRoute
   '/composition-nutritionnelle': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes': typeof FichesRegimesIndexRoute
   '/maladies': typeof MaladiesIndexRoute
+  '/recettes': typeof RecettesIndexRoute
   '/regimes': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
@@ -332,7 +347,7 @@ export interface FileRoutesById {
   '/fiches-regimes': typeof FichesRegimesRouteWithChildren
   '/maladies': typeof MaladiesRouteWithChildren
   '/menus': typeof MenusRoute
-  '/recettes': typeof RecettesRoute
+  '/recettes': typeof RecettesRouteWithChildren
   '/regimes': typeof RegimesRouteWithChildren
   '/aliments/$id': typeof AlimentsIdRoute
   '/calculateurs/calories': typeof CalculateursCaloriesRoute
@@ -341,11 +356,13 @@ export interface FileRoutesById {
   '/fiches-regimes/$slug': typeof FichesRegimesSlugRoute
   '/maladies/$slug': typeof MaladiesSlugRoute
   '/nutriments/zinc': typeof NutrimentsZincRoute
+  '/recettes/$id': typeof RecettesIdRoute
   '/regimes/$slug': typeof RegimesSlugRoute
   '/calculateurs/': typeof CalculateursIndexRoute
   '/composition-nutritionnelle/': typeof CompositionNutritionnelleIndexRoute
   '/fiches-regimes/': typeof FichesRegimesIndexRoute
   '/maladies/': typeof MaladiesIndexRoute
+  '/recettes/': typeof RecettesIndexRoute
   '/regimes/': typeof RegimesIndexRoute
   '/composition-nutritionnelle/mineraux/calcium': typeof CompositionNutritionnelleMinerauxCalciumRoute
   '/composition-nutritionnelle/mineraux/chrome': typeof CompositionNutritionnelleMinerauxChromeRoute
@@ -382,11 +399,13 @@ export interface FileRouteTypes {
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/nutriments/zinc'
+    | '/recettes/$id'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
     | '/fiches-regimes/'
     | '/maladies/'
+    | '/recettes/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/chrome'
@@ -408,18 +427,19 @@ export interface FileRouteTypes {
     | '/aliments'
     | '/compteur'
     | '/menus'
-    | '/recettes'
     | '/aliments/$id'
     | '/calculateurs/calories'
     | '/calculateurs/dfg'
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/nutriments/zinc'
+    | '/recettes/$id'
     | '/regimes/$slug'
     | '/calculateurs'
     | '/composition-nutritionnelle'
     | '/fiches-regimes'
     | '/maladies'
+    | '/recettes'
     | '/regimes'
     | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/chrome'
@@ -454,11 +474,13 @@ export interface FileRouteTypes {
     | '/fiches-regimes/$slug'
     | '/maladies/$slug'
     | '/nutriments/zinc'
+    | '/recettes/$id'
     | '/regimes/$slug'
     | '/calculateurs/'
     | '/composition-nutritionnelle/'
     | '/fiches-regimes/'
     | '/maladies/'
+    | '/recettes/'
     | '/regimes/'
     | '/composition-nutritionnelle/mineraux/calcium'
     | '/composition-nutritionnelle/mineraux/chrome'
@@ -485,7 +507,7 @@ export interface RootRouteChildren {
   FichesRegimesRoute: typeof FichesRegimesRouteWithChildren
   MaladiesRoute: typeof MaladiesRouteWithChildren
   MenusRoute: typeof MenusRoute
-  RecettesRoute: typeof RecettesRoute
+  RecettesRoute: typeof RecettesRouteWithChildren
   RegimesRoute: typeof RegimesRouteWithChildren
   NutrimentsZincRoute: typeof NutrimentsZincRoute
 }
@@ -638,6 +660,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/nutriments/zinc'
       preLoaderRoute: typeof NutrimentsZincRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/recettes/': {
+      id: '/recettes/'
+      path: '/'
+      fullPath: '/recettes/'
+      preLoaderRoute: typeof RecettesIndexRouteImport
+      parentRoute: typeof RecettesRoute
+    }
+    '/recettes/$id': {
+      id: '/recettes/$id'
+      path: '/$id'
+      fullPath: '/recettes/$id'
+      preLoaderRoute: typeof RecettesIdRouteImport
+      parentRoute: typeof RecettesRoute
     }
     '/regimes/': {
       id: '/regimes/'
@@ -881,6 +917,20 @@ const MaladiesRouteWithChildren = MaladiesRoute._addFileChildren(
   MaladiesRouteChildren,
 )
 
+interface RecettesRouteChildren {
+  RecettesIdRoute: typeof RecettesIdRoute
+  RecettesIndexRoute: typeof RecettesIndexRoute
+}
+
+const RecettesRouteChildren: RecettesRouteChildren = {
+  RecettesIdRoute: RecettesIdRoute,
+  RecettesIndexRoute: RecettesIndexRoute,
+}
+
+const RecettesRouteWithChildren = RecettesRoute._addFileChildren(
+  RecettesRouteChildren,
+)
+
 interface RegimesRouteChildren {
   RegimesSlugRoute: typeof RegimesSlugRoute
   RegimesIndexRoute: typeof RegimesIndexRoute
@@ -903,7 +953,7 @@ const rootRouteChildren: RootRouteChildren = {
   FichesRegimesRoute: FichesRegimesRouteWithChildren,
   MaladiesRoute: MaladiesRouteWithChildren,
   MenusRoute: MenusRoute,
-  RecettesRoute: RecettesRoute,
+  RecettesRoute: RecettesRouteWithChildren,
   RegimesRoute: RegimesRouteWithChildren,
   NutrimentsZincRoute: NutrimentsZincRoute,
 }

@@ -14,3 +14,4 @@
 - Organize nutrient content under composition-nutritionnelle/category/nutrient routes with Outlet layouts and a shared section registry; hide empty groups and redirect legacy nutrient URLs to avoid duplicate content while preserving old links.
 - Use the shared mineral table and reference-percentage helper for mineral sheets; keep serving bases explicit so mass, volume and salt servings cannot be confused.
 - Keep fermentation recipe data and preparation parameters in one shared module; the recipe gallery and dialogs present the same records to avoid conflicting salt bases.
+- Recipes live in src/data/recettes.ts grouped by `collection`; shared collection content in `collectionInfo`; /recettes lists, /recettes/$id renders the fiche — add recipes as data only.

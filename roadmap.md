@@ -13,3 +13,4 @@
 - [x] Amélioration visuelle des résultats du calculateur de besoins (MB, DET, objectif, macros + explications)
 - [x] Menus : programme végétarien 7 jours (profils lacto-ovo/lacto/ovo/végétalien, remplacer un aliment, vue semaine)
 - Module « Diurétiques » hors périmètre NutriSanté : destiné à une autre application.
+- [x] Bibliothèque Recettes avec fiches individuelles

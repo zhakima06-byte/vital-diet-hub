@@ -14,4 +14,7 @@ test("whole vegetables do not reuse the dry salting base", () => {
   const whole = recipes.filter((recipe) => recipe.category === "Légumes entiers");
   assert.equal(whole.length, 2);
   for (const recipe of whole) assert.equal(recipe.saltBasis, "légumes + eau");
+});test("every recipe has a preparation time and a collection with precautions", async () => {
+  const { collectionInfo } = await import("./recettes");
+  for (const r of recipes) { assert.ok(r.prepTime); assert.ok(collectionInfo[r.collection]?.precautions.length); }
 });
